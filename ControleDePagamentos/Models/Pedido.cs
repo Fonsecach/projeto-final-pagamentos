@@ -16,12 +16,12 @@ public class Pedido
         // Chave estrangeira para Pessoa (Devedor)
         public int DevedorID { get; set; }
         [ForeignKey("DevedorID")] // Anotação para indicar a chave estrangeira
-        public Pessoa Devedor { get; set; }
+        public Pessoa? Devedor { get; set; }
 
         // Chave estrangeira para Pessoa (Credor)
         public int CredorID { get; set; }
         [ForeignKey("CredorID")] // Anotação para indicar a chave estrangeira
-        public Pessoa Credor { get; set; }
+        public Pessoa? Credor { get; set; }
 
     }
 }

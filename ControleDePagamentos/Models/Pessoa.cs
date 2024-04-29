@@ -15,9 +15,9 @@ namespace Models
         public string? Documento { get; set; }
         public TipoPessoa Tipo { get; set; }
         // Relacionamento com Endereço (1 para muitos)
-        public List<Endereco> Enderecos { get; set; }
+        public List<Endereco>? Enderecos { get; set; }
         // Relacionamento com Contato (1 para muitos)
-        public List<Contato> Contatos { get; set; }
+        public List<Contato>? Contatos { get; set; }
         public DateTime CriadoEm { get; set; } = DateTime.Now;
     }
     public class Endereco
@@ -32,7 +32,7 @@ namespace Models
         // Chave estrangeira para Pessoa (muitos para 1)
         public int PessoaID { get; set; }
         [ForeignKey("PessoaID")] // Anotação para indicar a chave estrangeira
-        public Pessoa Pessoa { get; set; }
+        public Pessoa? Pessoa { get; set; }
     }
 
     public class Contato
@@ -47,7 +47,7 @@ namespace Models
         // Relacionamento com Pessoa (muitos para 1)
         public int PessoaID { get; set; }
         [ForeignKey("PessoaID")] // Anotação para indicar a chave estrangeira
-        public Pessoa Pessoa { get; set; }
+        public Pessoa? Pessoa { get; set; }
     }
 
     public enum TipoPessoa
