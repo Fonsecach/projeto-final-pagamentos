@@ -12,6 +12,7 @@ namespace Models
         public int ID { get; set; }
         public decimal Valor { get; set; }
         public DateTime DataDePagamento { get; set; }
+        public string? Status { get; set; }
 
         // Chave estrangeira para Pessoa (Devedor)
         public int DevedorID { get; set; }

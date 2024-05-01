@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ControleDePagamentos.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace ControleDePagamentos.Migrations
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: true),
-                    Documento = table.Column<string>(type: "TEXT", nullable: true),
+                    NumDocumento = table.Column<string>(type: "TEXT", nullable: true),
                     Tipo = table.Column<int>(type: "INTEGER", nullable: false),
                     CriadoEm = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -56,7 +56,8 @@ namespace ControleDePagamentos.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    EnderecoCompleto = table.Column<string>(type: "TEXT", nullable: true),
+                    Logradouro = table.Column<string>(type: "TEXT", nullable: true),
+                    Bairro = table.Column<string>(type: "TEXT", nullable: true),
                     Cidade = table.Column<string>(type: "TEXT", nullable: true),
                     Estado = table.Column<string>(type: "TEXT", nullable: true),
                     CEP = table.Column<string>(type: "TEXT", nullable: true),
@@ -81,6 +82,7 @@ namespace ControleDePagamentos.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Valor = table.Column<decimal>(type: "TEXT", nullable: false),
                     DataDePagamento = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
                     DevedorID = table.Column<int>(type: "INTEGER", nullable: false),
                     CredorID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -108,7 +110,10 @@ namespace ControleDePagamentos.Migrations
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ValorTotal = table.Column<decimal>(type: "TEXT", nullable: true),
+                    Nome = table.Column<string>(type: "TEXT", nullable: true),
+                    Descricao = table.Column<string>(type: "TEXT", nullable: true),
                     DataDoPedido = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DataDoVencimento = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DevedorID = table.Column<int>(type: "INTEGER", nullable: false),
                     CredorID = table.Column<int>(type: "INTEGER", nullable: false)
                 },

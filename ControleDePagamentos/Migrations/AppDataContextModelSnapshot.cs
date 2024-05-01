@@ -51,16 +51,19 @@ namespace ControleDePagamentos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Bairro")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CEP")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Cidade")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EnderecoCompleto")
+                    b.Property<string>("Estado")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Estado")
+                    b.Property<string>("Logradouro")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PessoaID")
@@ -88,6 +91,9 @@ namespace ControleDePagamentos.Migrations
                     b.Property<int>("DevedorID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("Valor")
                         .HasColumnType("TEXT");
 
@@ -112,8 +118,17 @@ namespace ControleDePagamentos.Migrations
                     b.Property<DateTime>("DataDoPedido")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("DataDoVencimento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("DevedorID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal?>("ValorTotal")
                         .HasColumnType("TEXT");
@@ -136,10 +151,10 @@ namespace ControleDePagamentos.Migrations
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Documento")
+                    b.Property<string>("Nome")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("NumDocumento")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Tipo")

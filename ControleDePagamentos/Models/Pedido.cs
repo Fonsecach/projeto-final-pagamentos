@@ -11,7 +11,10 @@ public class Pedido
     {
         public int ID { get; set; }
         public decimal? ValorTotal { get; set; }
+        public string? Nome { get; set;}
+        public string? Descricao { get; set;}
         public DateTime DataDoPedido { get; set; }
+        public DateTime DataDoVencimento { get; set; }
 
         // Chave estrangeira para Pessoa (Devedor)
         public int DevedorID { get; set; }

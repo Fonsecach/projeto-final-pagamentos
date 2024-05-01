@@ -12,7 +12,7 @@ namespace Models
         [Key]
         public int ID { get; set; }
         public string? Nome { get; set; }
-        public string? Documento { get; set; }
+        public string? NumDocumento { get; set; }
         public TipoPessoa Tipo { get; set; }
         // Relacionamento com Endereço (1 para muitos)
         public List<Endereco>? Enderecos { get; set; }
@@ -24,7 +24,8 @@ namespace Models
     {
         [Key]
         public int ID { get; set; }
-        public string? EnderecoCompleto { get; set; }
+        public string? Logradouro { get; set; }
+        public string? Bairro { get; set; }
         public string? Cidade { get; set; }
         public string? Estado { get; set; }
         public string? CEP { get; set; }
