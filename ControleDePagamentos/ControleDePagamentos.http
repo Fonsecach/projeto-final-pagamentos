@@ -1,6 +1,207 @@
+
+
 @ControleDePagamentos_HostAddress = http://localhost:5241
 
-GET {{ControleDePagamentos_HostAddress}}/weatherforecast/
-Accept: application/json
+//Obtem as pessoas cadastradas
+GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir
+
+###
+
+//Cadastro de pessoas
+POST {{ControleDePagamentos_HostAddress}}/api/pessoas/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "ID": 1,
+        "Nome": "João",
+        "NumDocumento": "123456789",
+        "Tipo": 0,
+        "Enderecos": [
+            {
+                "ID": 1,
+                "Logradouro": "Rua das Flores",
+                "Bairro": "Centro",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "80000-000",
+                "PessoaID": 1
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 1,
+                "Email": "joao@email.com",
+                "WhatsApp": "+55 41 99999-9999",
+                "Telefone": "+55 41 88888-8888",
+                "Observacoes": "Contato principal",
+                "PessoaID": 1
+            }
+        ]
+    },
+    {
+        "ID": 2,
+        "Nome": "Maria",
+        "NumDocumento": "987654321",
+        "Tipo": 1,
+        "Enderecos": [
+            {
+                "ID": 2,
+                "Logradouro": "Avenida das Américas",
+                "Bairro": "Jardim Botânico",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "81000-000",
+                "PessoaID": 2
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 2,
+                "Email": "maria@email.com",
+                "WhatsApp": "+55 41 77777-7777",
+                "Telefone": "+55 41 66666-6666",
+                "Observacoes": "Contato principal",
+                "PessoaID": 2
+            }
+        ]
+    },
+    {
+        "ID": 3,
+        "Nome": "Carlos",
+        "NumDocumento": "111222333",
+        "Tipo": 0,
+        "Enderecos": [
+            {
+                "ID": 3,
+                "Logradouro": "Rua das Orquídeas",
+                "Bairro": "Jardim das Flores",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "81000-001",
+                "PessoaID": 3
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 3,
+                "Email": "carlos@email.com",
+                "WhatsApp": "+55 41 55555-5555",
+                "Telefone": "+55 41 44444-4444",
+                "Observacoes": "Contato principal",
+                "PessoaID": 3
+            }
+        ]
+    },
+    {
+        "ID": 4,
+        "Nome": "Ana",
+        "NumDocumento": "444555666",
+        "Tipo": 1,
+        "Enderecos": [
+            {
+                "ID": 4,
+                "Logradouro": "Avenida das Rosas",
+                "Bairro": "Jardim das Rosas",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "81000-002",
+                "PessoaID": 4
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 4,
+                "Email": "ana@email.com",
+                "WhatsApp": "+55 41 33333-3333",
+                "Telefone": "+55 41 22222-2222",
+                "Observacoes": "Contato principal",
+                "PessoaID": 4
+            }
+        ]
+    },
+    {
+        "ID": 5,
+        "Nome": "Pedro",
+        "NumDocumento": "777888999",
+        "Tipo": 0,
+        "Enderecos": [
+            {
+                "ID": 5,
+                "Logradouro": "Rua das Margaridas",
+                "Bairro": "Jardim das Margaridas",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "81000-003",
+                "PessoaID": 5
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 5,
+                "Email": "pedro@email.com",
+                "WhatsApp": "+55 41 11111-1111",
+                "Telefone": "+55 41 00000-0000",
+                "Observacoes": "Contato principal",
+                "PessoaID": 5
+            }
+        ]
+    },
+    {
+        "ID": 6,
+        "Nome": "Julia",
+        "NumDocumento": "000111222",
+        "Tipo": 1,
+        "Enderecos": [
+            {
+                "ID": 6,
+                "Logradouro": "Avenida das Tulipas",
+                "Bairro": "Jardim das Tulipas",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "81000-004",
+                "PessoaID": 6
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 6,
+                "Email": "julia@email.com",
+                "WhatsApp": "+55 41 99999-0000",
+                "Telefone": "+55 41 88888-1111",
+                "Observacoes": "Contato principal",
+                "PessoaID": 6
+            }
+        ]
+    },
+    {
+        "ID": 7,
+        "Nome": "Lucas",
+        "NumDocumento": "333444555",
+        "Tipo": 0,
+        "Enderecos": [
+            {
+                "ID": 7,
+                "Logradouro": "Rua das Violetas",
+                "Bairro": "Jardim das Violetas",
+                "Cidade": "Curitiba",
+                "Estado": "PR",
+                "CEP": "81000-005",
+                "PessoaID": 7
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 7,
+                "Email": "lucas@email.com",
+                "WhatsApp": "+55 41 77777-2222",
+                "Telefone": "+55 41 66666-3333",
+                "Observacoes": "Contato principal",
+                "PessoaID": 7
+            }
+        ]
+    }
+]
+
 
 ###
