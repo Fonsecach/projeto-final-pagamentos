@@ -11,8 +11,8 @@ using Models;
 namespace ControleDePagamentos.Migrations
 {
     [DbContext(typeof(AppDataContext))]
-    [Migration("20240501233429_Initial")]
-    partial class Initial
+    [Migration("20240505200933_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,9 @@ namespace ControleDePagamentos.Migrations
                     b.Property<int>("DevedorID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PedidoID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Status")
                         .HasColumnType("TEXT");
 
@@ -105,6 +108,8 @@ namespace ControleDePagamentos.Migrations
                     b.HasIndex("CredorID");
 
                     b.HasIndex("DevedorID");
+
+                    b.HasIndex("PedidoID");
 
                     b.ToTable("Pagamentos");
                 });
@@ -204,9 +209,17 @@ namespace ControleDePagamentos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Pedido", "Pedido")
+                        .WithMany()
+                        .HasForeignKey("PedidoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Credor");
 
                     b.Navigation("Devedor");
+
+                    b.Navigation("Pedido");
                 });
 
             modelBuilder.Entity("Models.Pedido", b =>

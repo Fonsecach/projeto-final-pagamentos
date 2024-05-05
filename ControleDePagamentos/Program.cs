@@ -26,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//cadastro de pessoas
 app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [FromServices] AppDataContext contextPessoas) =>
 {
     var pessoasNaoSalvas = new List<Pessoa>();
@@ -54,6 +55,7 @@ app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [F
 
 }).WithName("AddPessoas").WithOpenApi();
 
+//consulta de todas as pessoas
 app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas) =>
 {
     var pessoas = await contextPessoas.Pessoas.ToListAsync();
@@ -64,6 +66,49 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
     return Results.NotFound("Nenhuma pessoa foi registrada");
 
 }).WithName("ExibirPessoas").WithOpenApi();
+
+
+//cadastro de pedidos
+
+app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [FromServices] AppDataContext contextPedidos) =>
+{
+    var pedidoNaoSalvo = new List<Pedido>();
+
+    foreach (var pedido in pedidos)
+    {
+        // Verifica se o pedido já está na base de dados pelo ID
+        var pedidoExistente = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.ID == pedido.ID);
+
+        if (pedidoExistente != null)
+        {
+            // Pedido já está na base de dados, então retorna erro
+            return Results.Conflict($"A pessoa com ID {pedido.ID} já está cadastrado.");
+        }
+        else
+        {
+            // Pessoa não está na base de dados, então salva
+            contextPedidos.Pedidos.Add(pedido);
+            pedidoNaoSalvo.Add(pedido);
+        }
+    }
+
+    await contextPedidos.SaveChangesAsync();
+
+    return Results.Created("", pedidoNaoSalvo);
+
+}).WithName("cadastrarPedidos").WithOpenApi();
+
+
+//consulta de todos os pedidos
+app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPedidos) =>
+{
+    var pedidos = await contextPedidos.Pedidos.ToListAsync();
+    if (pedidos.Any()){
+        return Results.Ok(pedidos);
+    }
+    return Results.NotFound("Nenhuma pedido foi registrada");
+
+}).WithName("ExibirPedidos").WithOpenApi();
 
 
 app.Run();

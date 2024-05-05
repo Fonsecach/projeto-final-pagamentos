@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ControleDePagamentos.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,35 +75,6 @@ namespace ControleDePagamentos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pagamentos",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Valor = table.Column<decimal>(type: "TEXT", nullable: false),
-                    DataDePagamento = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: true),
-                    DevedorID = table.Column<int>(type: "INTEGER", nullable: false),
-                    CredorID = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pagamentos", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Pagamentos_Pessoas_CredorID",
-                        column: x => x.CredorID,
-                        principalTable: "Pessoas",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Pagamentos_Pessoas_DevedorID",
-                        column: x => x.DevedorID,
-                        principalTable: "Pessoas",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pedidos",
                 columns: table => new
                 {
@@ -134,6 +105,42 @@ namespace ControleDePagamentos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Pagamentos",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Valor = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DataDePagamento = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    PedidoID = table.Column<int>(type: "INTEGER", nullable: false),
+                    DevedorID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CredorID = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pagamentos", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Pagamentos_Pedidos_PedidoID",
+                        column: x => x.PedidoID,
+                        principalTable: "Pedidos",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pagamentos_Pessoas_CredorID",
+                        column: x => x.CredorID,
+                        principalTable: "Pessoas",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pagamentos_Pessoas_DevedorID",
+                        column: x => x.DevedorID,
+                        principalTable: "Pessoas",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Contato_PessoaID",
                 table: "Contato",
@@ -153,6 +160,11 @@ namespace ControleDePagamentos.Migrations
                 name: "IX_Pagamentos_DevedorID",
                 table: "Pagamentos",
                 column: "DevedorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pagamentos_PedidoID",
+                table: "Pagamentos",
+                column: "PedidoID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pedidos_CredorID",

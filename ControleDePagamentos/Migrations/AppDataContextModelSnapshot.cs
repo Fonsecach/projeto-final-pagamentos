@@ -91,6 +91,9 @@ namespace ControleDePagamentos.Migrations
                     b.Property<int>("DevedorID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PedidoID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Status")
                         .HasColumnType("TEXT");
 
@@ -102,6 +105,8 @@ namespace ControleDePagamentos.Migrations
                     b.HasIndex("CredorID");
 
                     b.HasIndex("DevedorID");
+
+                    b.HasIndex("PedidoID");
 
                     b.ToTable("Pagamentos");
                 });
@@ -201,9 +206,17 @@ namespace ControleDePagamentos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Pedido", "Pedido")
+                        .WithMany()
+                        .HasForeignKey("PedidoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Credor");
 
                     b.Navigation("Devedor");
+
+                    b.Navigation("Pedido");
                 });
 
             modelBuilder.Entity("Models.Pedido", b =>

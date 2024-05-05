@@ -7,21 +7,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
-    public class Pagamento
-    {
-        public int ID { get; set; }
-        public decimal Valor { get; set; }
-        public DateTime DataDePagamento { get; set; }
-        public string? Status { get; set; }
+public class Pagamento
+{
+    public int ID { get; set; }
+    public decimal Valor { get; set; }
+    public DateTime DataDePagamento { get; set; }
+    public string? Status { get; set; }
 
-        // Chave estrangeira para Pessoa (Devedor)
-        public int DevedorID { get; set; }
-        [ForeignKey("DevedorID")] // Anotação para indicar a chave estrangeira
-        public Pessoa? Devedor { get; set; }
+    // Chave estrangeira para Pedido
+    public int PedidoID { get; set; }
+    [ForeignKey("PedidoID")] // Anotação para indicar a chave estrangeira
+    public Pedido? Pedido { get; set; }
 
-        // Chave estrangeira para Pessoa (Credor)
-        public int CredorID { get; set; }
-        [ForeignKey("CredorID")] // Anotação para indicar a chave estrangeira
-        public Pessoa? Credor { get; set; }
-    }
+    // Chave estrangeira para Pessoa (Devedor)
+    public int DevedorID { get; set; }
+    [ForeignKey("DevedorID")] // Anotação para indicar a chave estrangeira
+    public Pessoa? Devedor { get; set; }
+
+    // Chave estrangeira para Pessoa (Credor)
+    public int CredorID { get; set; }
+    [ForeignKey("CredorID")] // Anotação para indicar a chave estrangeira
+    public Pessoa? Credor { get; set; }
+}
+
 }
