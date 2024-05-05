@@ -67,7 +67,6 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
 
 }).WithName("ExibirPessoas").WithOpenApi();
 
-
 //consulta  pessoa por ID
 app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext contextPessoas, int id) =>
 {
@@ -91,9 +90,7 @@ app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataConte
 }).WithName("ExibirPessoaPorNome").WithOpenApi();
 
 
-
 //cadastro de pedidos
-
 app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [FromServices] AppDataContext contextPedidos) =>
 {
     var pedidoNaoSalvo = new List<Pedido>();
