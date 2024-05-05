@@ -63,7 +63,7 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
     }
     return Results.NotFound("Nenhuma pessoa foi registrada");
 
-}).WithName("ListarPessoas").WithOpenApi();
+}).WithName("ExibirPessoas").WithOpenApi();
 
 
 app.Run();
