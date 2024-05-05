@@ -19,6 +19,8 @@ namespace Models
         // Relacionamento com Contato (1 para muitos)
         public List<Contato>? Contatos { get; set; }
         public DateTime CriadoEm { get; set; } = DateTime.Now;
+
+
     }
     public class Endereco
     {

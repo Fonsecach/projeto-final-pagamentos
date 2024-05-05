@@ -68,6 +68,30 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
 }).WithName("ExibirPessoas").WithOpenApi();
 
 
+//consulta  pessoa por ID
+app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext contextPessoas, int id) =>
+{
+    var pessoa = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.ID == id);
+    if (pessoa != null){
+        return Results.Ok(pessoa);
+    }
+    return Results.NotFound($"Pessoa com ID {id} não foi encontrada");
+
+}).WithName("ExibirPessoaPorId").WithOpenApi();
+
+//consultar pessoa por nome
+app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataContext contextPessoas, string nome) =>
+{
+    var pessoa = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.Nome == nome);
+    if (pessoa != null){
+        return Results.Ok(pessoa);
+    }
+    return Results.NotFound($"Pessoa com nome {nome} não foi encontrada");
+
+}).WithName("ExibirPessoaPorNome").WithOpenApi();
+
+
+
 //cadastro de pedidos
 
 app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [FromServices] AppDataContext contextPedidos) =>
@@ -82,7 +106,7 @@ app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [Fr
         if (pedidoExistente != null)
         {
             // Pedido já está na base de dados, então retorna erro
-            return Results.Conflict($"A pessoa com ID {pedido.ID} já está cadastrado.");
+            return Results.Conflict($"Um pedido com ID {pedido.ID} já está cadastrado.");
         }
         else
         {

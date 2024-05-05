@@ -5,6 +5,19 @@
 //Obtem todas pessoas cadastradas
 GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir
 
+
+###
+
+//Busca pessoa por ID
+GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir/id/1
+
+
+###
+
+//Busca pessoa por ID
+GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir/nome/Ana
+
+
 ###
 
 //Cadastro de pessoas
