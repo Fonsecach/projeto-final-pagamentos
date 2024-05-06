@@ -293,10 +293,53 @@ Content-Type: application/json
 
 
 ###
-
 //Obtem todos pedidos cadastradas
 GET {{ControleDePagamentos_HostAddress}}/api/pedido/exibir
 
 
 ###
+//Criar um novo pagamento
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
 
+{
+  "Valor": 100.50,
+  "DataDePagamento": "2024-05-10T00:00:00",
+  "Status": "Pago",
+  "PedidoID": 1,
+  "DevedorID": 1,
+  "CredorID": 2
+}
+
+
+###
+//Criar um novo pagamento
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
+
+{
+  "Valor": 300.75,
+  "DataDePagamento": "2024-05-22T00:00:00",
+  "Status": "Pago",
+  "PedidoID": 2,
+  "DevedorID": 5,
+  "CredorID": 6
+}
+
+
+###
+//Criar um novo pagamento
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
+
+{
+  "Valor": 200.00,
+  "DataDePagamento": "2024-05-21T00:00:00",
+  "Status": "Pago",
+  "PedidoID": 2,
+  "DevedorID": 3,
+  "CredorID": 4
+}
+
+
+###
