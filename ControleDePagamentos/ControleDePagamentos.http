@@ -218,7 +218,41 @@ Content-Type: application/json
 
 
 ###
+//Atualizar uma pessoa
+PUT {{ControleDePagamentos_HostAddress}}/api/pessoas/alterar/5
+Content-Type: application/json
 
+{
+   "nome":"Fernando Soares",
+   "numDocumento":"1234567890",
+   "tipo":0,
+   "enderecos":[
+      {
+         "id":5,
+         "Logradouro":"Rua das Violetas",
+         "Bairro":"Jardim das Violetas",
+         "Cidade":"Curitiba",
+         "Estado":"PR",
+         "CEP":"81000-005",
+         "PessoaID":5
+      }
+   ],
+   "contatos":[
+      {
+         "id":5,
+         "email":"pedrosoares@teste.com",
+         "whatsapp":"551234567890",
+         "telefone":"1234-5678"
+      }
+   ]
+}
+
+###
+//Remover uma pessoa
+DELETE {{ControleDePagamentos_HostAddress}}/api/pessoas/deletar/7
+
+
+###
 
 //Cadastro de pedido
 POST {{ControleDePagamentos_HostAddress}}/api/pedido/cadastrar
