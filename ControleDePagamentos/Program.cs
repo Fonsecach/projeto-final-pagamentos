@@ -89,6 +89,39 @@ app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataConte
 
 }).WithName("ExibirPessoaPorNome").WithOpenApi();
 
+//alterar pessoa
+app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pessoa pessoaAtualizada, [FromServices] AppDataContext contextPessoas) =>
+{
+    var pessoaExistente = await contextPessoas.Pessoas.FindAsync(id);
+
+    if (pessoaExistente is null)
+    {
+        return Results.NotFound("Pessoa não localizada");
+    }
+
+    // Atualizar as propriedades da pessoa existente com os dados da pessoaAtualizada
+    pessoaExistente.Nome = pessoaAtualizada.Nome;
+    pessoaExistente.NumDocumento = pessoaAtualizada.NumDocumento;
+    pessoaExistente.Tipo = pessoaAtualizada.Tipo;
+
+    await contextPessoas.SaveChangesAsync();
+
+    return Results.Ok(pessoaAtualizada);
+}).WithName("AtualizarPessoa").WithOpenApi();
+
+//excluir pessoa
+
+app.MapDelete("/api/pessoas/deletar/{id}", async ([FromRoute] int id,[FromServices] AppDataContext contextPessoas) =>{
+    var pessoa = await contextPessoas.Pessoas.FindAsync(id);
+    if(pessoa is null)
+    {
+        return Results.NotFound("Pessoa não localizada");
+    }
+    contextPessoas.Pessoas.Remove(pessoa);
+    await contextPessoas.SaveChangesAsync();
+
+    return Results.Ok(pessoa);
+}).WithName("DeletarPessoa").WithOpenApi();
 
 //cadastro de pedidos
 app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [FromServices] AppDataContext contextPedidos) =>
