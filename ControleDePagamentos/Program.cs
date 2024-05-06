@@ -164,5 +164,27 @@ app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPed
 
 }).WithName("ExibirPedidos").WithOpenApi();
 
+//Implementar endpoints dos pedidos
+
+//cadastro de pagamentos
+app.MapPost("/api/pagamento/cadastrar", async ([FromBody] Pagamento pagamento, [FromServices] AppDataContext contextPagamentos) => {
+    if (pagamento is null) {
+        return Results.BadRequest("O pagamento enviado é inválido!");
+    }
+
+    // Verificação adicional para evitar pagamentos duplicados com o mesmo PedidoID
+    var pagamentoExistenteComPedidoID = await contextPagamentos.Pagamentos
+        .FirstOrDefaultAsync(p => p.PedidoID == pagamento.PedidoID);
+
+    if (pagamentoExistenteComPedidoID != null) {
+        return Results.BadRequest("Já existe um pagamento registrado para este PedidoID!");
+    }
+
+    contextPagamentos.Pagamentos.Add(pagamento);
+    await contextPagamentos.SaveChangesAsync();
+    return Results.Ok(pagamento);
+    
+}).WithName("CadastrarPagamentos").WithOpenApi();
+
 
 app.Run();
