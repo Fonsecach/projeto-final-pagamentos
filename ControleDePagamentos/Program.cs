@@ -186,5 +186,30 @@ app.MapPost("/api/pagamento/cadastrar", async ([FromBody] Pagamento pagamento, [
     
 }).WithName("CadastrarPagamentos").WithOpenApi();
 
+//consulta de todos os pagamentos
+app.MapGet("/api/pagamentos/exibir", async ([FromServices] AppDataContext contextPagamentos) =>
+{
+    var pagamentos = await contextPagamentos.Pagamentos.ToListAsync();
+    if (pagamentos.Any()){
+        return Results.Ok(pagamentos);
+    }
+    return Results.NotFound("Nenhuma pedido foi registrada");
+
+}).WithName("ExibirPagamentos").WithOpenApi();
+
+//Consulta de todos pagamentos recebidos por ID
+app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) => {
+    var pagamentos = await contextPagamentos.Pagamentos
+        .Where(p => p.CredorID == id)
+        .ToListAsync();
+
+    if (pagamentos == null || pagamentos.Count == 0)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Json(pagamentos);
+}).WithName("ExibirPagamentosRecebidosPorId").WithOpenApi();
+
 
 app.Run();
