@@ -33,9 +33,8 @@ namespace Models
         public string? CEP { get; set; }
 
         // Chave estrangeira para Pessoa (muitos para 1)
+        [ForeignKey("PessoaID")] 
         public int PessoaID { get; set; }
-        [ForeignKey("PessoaID")] // Anotação para indicar a chave estrangeira
-        public Pessoa? Pessoa { get; set; }
     }
 
     public class Contato
@@ -48,9 +47,8 @@ namespace Models
         public string? Observacoes { get; set; }
 
         // Relacionamento com Pessoa (muitos para 1)
+        [ForeignKey("PessoaID")]
         public int PessoaID { get; set; }
-        [ForeignKey("PessoaID")] // Anotação para indicar a chave estrangeira
-        public Pessoa? Pessoa { get; set; }
     }
 
     public enum TipoPessoa

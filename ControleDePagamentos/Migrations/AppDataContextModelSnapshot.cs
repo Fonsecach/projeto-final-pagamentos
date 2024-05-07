@@ -94,19 +94,10 @@ namespace ControleDePagamentos.Migrations
                     b.Property<int>("PedidoID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("Valor")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CredorID");
-
-                    b.HasIndex("DevedorID");
-
-                    b.HasIndex("PedidoID");
 
                     b.ToTable("Pagamentos");
                 });
@@ -135,14 +126,13 @@ namespace ControleDePagamentos.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal?>("ValorTotal")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CredorID");
-
-                    b.HasIndex("DevedorID");
 
                     b.ToTable("Pedidos");
                 });
@@ -172,70 +162,20 @@ namespace ControleDePagamentos.Migrations
 
             modelBuilder.Entity("Models.Contato", b =>
                 {
-                    b.HasOne("Models.Pessoa", "Pessoa")
+                    b.HasOne("Models.Pessoa", null)
                         .WithMany("Contatos")
                         .HasForeignKey("PessoaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("Models.Endereco", b =>
                 {
-                    b.HasOne("Models.Pessoa", "Pessoa")
+                    b.HasOne("Models.Pessoa", null)
                         .WithMany("Enderecos")
                         .HasForeignKey("PessoaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Pessoa");
-                });
-
-            modelBuilder.Entity("Models.Pagamento", b =>
-                {
-                    b.HasOne("Models.Pessoa", "Credor")
-                        .WithMany()
-                        .HasForeignKey("CredorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Pessoa", "Devedor")
-                        .WithMany()
-                        .HasForeignKey("DevedorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Pedido", "Pedido")
-                        .WithMany()
-                        .HasForeignKey("PedidoID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Credor");
-
-                    b.Navigation("Devedor");
-
-                    b.Navigation("Pedido");
-                });
-
-            modelBuilder.Entity("Models.Pedido", b =>
-                {
-                    b.HasOne("Models.Pessoa", "Credor")
-                        .WithMany()
-                        .HasForeignKey("CredorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Pessoa", "Devedor")
-                        .WithMany()
-                        .HasForeignKey("DevedorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Credor");
-
-                    b.Navigation("Devedor");
                 });
 
             modelBuilder.Entity("Models.Pessoa", b =>

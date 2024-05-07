@@ -15,16 +15,14 @@ public class Pedido
         public string? Descricao { get; set;}
         public DateTime DataDoPedido { get; set; }
         public DateTime DataDoVencimento { get; set; }
+        public string? Status { get; set; }
 
         // Chave estrangeira para Pessoa (Devedor)
+        [ForeignKey("DevedorID")]
         public int DevedorID { get; set; }
-        [ForeignKey("DevedorID")] // Anotação para indicar a chave estrangeira
-        public Pessoa? Devedor { get; set; }
-
+        
         // Chave estrangeira para Pessoa (Credor)
-        public int CredorID { get; set; }
-        [ForeignKey("CredorID")] // Anotação para indicar a chave estrangeira
-        public Pessoa? Credor { get; set; }
-
+        [ForeignKey("CredorID")]
+        public int CredorID { get; set; }   
     }
 }
