@@ -59,7 +59,8 @@ app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [F
 app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas) =>
 {
     var pessoas = await contextPessoas.Pessoas.ToListAsync();
-    if (pessoas.Any()){
+    if (pessoas.Any())
+    {
         var pessoasOrdenadas = pessoas.OrderBy(p => p.Nome).ToList();
         return Results.Ok(pessoasOrdenadas);
     }
@@ -71,7 +72,8 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
 app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext contextPessoas, int id) =>
 {
     var pessoa = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.ID == id);
-    if (pessoa != null){
+    if (pessoa != null)
+    {
         return Results.Ok(pessoa);
     }
     return Results.NotFound($"Pessoa com ID {id} não foi encontrada");
@@ -82,7 +84,8 @@ app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext c
 app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataContext contextPessoas, string nome) =>
 {
     var pessoa = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.Nome == nome);
-    if (pessoa != null){
+    if (pessoa != null)
+    {
         return Results.Ok(pessoa);
     }
     return Results.NotFound($"Pessoa com nome {nome} não foi encontrada");
@@ -111,9 +114,10 @@ app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pe
 
 //excluir pessoa
 
-app.MapDelete("/api/pessoas/deletar/{id}", async ([FromRoute] int id,[FromServices] AppDataContext contextPessoas) =>{
+app.MapDelete("/api/pessoas/deletar/{id}", async ([FromRoute] int id, [FromServices] AppDataContext contextPessoas) =>
+{
     var pessoa = await contextPessoas.Pessoas.FindAsync(id);
-    if(pessoa is null)
+    if (pessoa is null)
     {
         return Results.NotFound("Pessoa não localizada");
     }
@@ -157,7 +161,8 @@ app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [Fr
 app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPedidos) =>
 {
     var pedidos = await contextPedidos.Pedidos.ToListAsync();
-    if (pedidos.Any()){
+    if (pedidos.Any())
+    {
         return Results.Ok(pedidos);
     }
     return Results.NotFound("Nenhuma pedido foi registrada");
@@ -165,10 +170,52 @@ app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPed
 }).WithName("ExibirPedidos").WithOpenApi();
 
 //Implementar endpoints dos pedidos
+//buscar pedido por ID
+app.MapGet("/api/pedido/exibir/id/{id}", async ([FromServices] AppDataContext contextPedidos, int id) =>
+{
+    var pedido = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.ID == id);
+    if (pedido != null)
+    {
+        return Results.Ok(pedido);
+    }
+    return Results.NotFound($"Pedido com ID {id} não foi encontrada");
+
+}).WithName("ExibirPedidoPorId").WithOpenApi();
+
+//buscar pedido por nome
+app.MapGet("/api/pedido/exibir/nome/{nome}", async ([FromServices] AppDataContext contextPedidos, string nome) =>
+{
+    var pedido = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.Nome == nome);
+    if (pedido != null)
+    {
+        return Results.Ok(pedido);
+    }
+    return Results.NotFound($"Pedido com nome {nome} não foi encontrada");
+
+}).WithName("ExibirPedidoPorNome").WithOpenApi();
+
+//TO-DO: implementar alterar pedidos
+
+//deletar pedidos
+app.MapDelete("/api/pedido/deletar/{id}", async ([FromRoute] int id, [FromServices] AppDataContext contextPedidos) =>
+{
+    var pedido = await contextPedidos.Pedidos.FindAsync(id);
+    if (pedido is null)
+    {
+        return Results.NotFound("Pedido não localizada");
+    }
+    contextPedidos.Pedidos.Remove(pedido);
+    await contextPedidos.SaveChangesAsync();
+
+    return Results.Ok(pedido);
+}).WithName("DeletarPedido").WithOpenApi();
+
 
 //cadastro de pagamentos
-app.MapPost("/api/pagamento/cadastrar", async ([FromBody] Pagamento pagamento, [FromServices] AppDataContext contextPagamentos) => {
-    if (pagamento is null) {
+app.MapPost("/api/pagamento/cadastrar", async ([FromBody] Pagamento pagamento, [FromServices] AppDataContext contextPagamentos) =>
+{
+    if (pagamento is null)
+    {
         return Results.BadRequest("O pagamento enviado é inválido!");
     }
 
@@ -176,21 +223,23 @@ app.MapPost("/api/pagamento/cadastrar", async ([FromBody] Pagamento pagamento, [
     var pagamentoExistenteComPedidoID = await contextPagamentos.Pagamentos
         .FirstOrDefaultAsync(p => p.PedidoID == pagamento.PedidoID);
 
-    if (pagamentoExistenteComPedidoID != null) {
+    if (pagamentoExistenteComPedidoID != null)
+    {
         return Results.BadRequest("Já existe um pagamento registrado para este PedidoID!");
     }
 
     contextPagamentos.Pagamentos.Add(pagamento);
     await contextPagamentos.SaveChangesAsync();
     return Results.Ok(pagamento);
-    
+
 }).WithName("CadastrarPagamentos").WithOpenApi();
 
 //consulta de todos os pagamentos
 app.MapGet("/api/pagamentos/exibir", async ([FromServices] AppDataContext contextPagamentos) =>
 {
     var pagamentos = await contextPagamentos.Pagamentos.ToListAsync();
-    if (pagamentos.Any()){
+    if (pagamentos.Any())
+    {
         return Results.Ok(pagamentos);
     }
     return Results.NotFound("Nenhuma pedido foi registrada");
@@ -198,7 +247,8 @@ app.MapGet("/api/pagamentos/exibir", async ([FromServices] AppDataContext contex
 }).WithName("ExibirPagamentos").WithOpenApi();
 
 //Consulta de todos pagamentos recebidos por ID
-app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) => {
+app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) =>
+{
     var pagamentos = await contextPagamentos.Pagamentos
         .Where(p => p.CredorID == id)
         .ToListAsync();
@@ -211,5 +261,18 @@ app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDat
     return Results.Json(pagamentos);
 }).WithName("ExibirPagamentosRecebidosPorId").WithOpenApi();
 
+//deletar pedidos
+app.MapDelete("/api/pagamentos/deletar/{id}", async ([FromRoute] int id, [FromServices] AppDataContext contextPagamentos) =>
+{
+    var pagamento = await contextPagamentos.Pagamentos.FindAsync(id);
+    if (pagamento is null)
+    {
+        return Results.NotFound("Pedido não localizada");
+    }
+    contextPagamentos.Pagamentos.Remove(pagamento);
+    await contextPagamentos.SaveChangesAsync();
+
+    return Results.Ok(pagamento);
+}).WithName("DeletarPagamento").WithOpenApi();
 
 app.Run();
