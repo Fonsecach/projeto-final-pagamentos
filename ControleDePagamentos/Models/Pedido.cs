@@ -15,7 +15,7 @@ public class Pedido
         public string? Descricao { get; set;}
         public DateTime DataDoPedido { get; set; }
         public DateTime DataDoVencimento { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; } = "Aguardando Pagamento";
 
         // Chave estrangeira para Pessoa (Devedor)
         [ForeignKey("DevedorID")]

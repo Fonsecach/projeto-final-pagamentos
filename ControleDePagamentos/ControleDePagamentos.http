@@ -355,7 +355,6 @@ Content-Type: application/json
         "Descricao": "Kit Luminárias modernas",
         "DataDoPedido": "2024-05-06T00:00:00",
         "DataDoVencimento": "2024-05-20T00:00:00",
-        "Status": "Aguarda pagamento",
         "DevedorID": 1,
         "CredorID": 2
     },
@@ -366,7 +365,6 @@ Content-Type: application/json
         "Descricao": "Este é o pedido número 2",
         "DataDoPedido": "2024-05-07T00:00:00",
         "DataDoVencimento": "2024-05-21T00:00:00",
-        "Status": "Aguarda pagamento",
         "DevedorID": 3,
         "CredorID": 4
     },
@@ -377,7 +375,6 @@ Content-Type: application/json
         "Descricao": "Este é o pedido número 3",
         "DataDoPedido": "2024-05-08T00:00:00",
         "DataDoVencimento": "2024-05-22T00:00:00",
-        "Status": "Aguarda pagamento",
         "DevedorID": 5,
         "CredorID": 6
     }
@@ -397,7 +394,6 @@ Content-Type: application/json
         "Descricao": "Kit Luminárias Vintage",
         "DataDoPedido": "2024-05-06T00:00:00",
         "DataDoVencimento": "2024-06-06T00:00:00",
-        "Status": "Aguarda pagamento",
         "DevedorID": 9,
         "CredorID": 8
     },
@@ -408,7 +404,6 @@ Content-Type: application/json
         "Descricao": "Cuba de Embutir Cerâmica Oval",
         "DataDoPedido": "2024-05-07T00:00:00",
         "DataDoVencimento": "2024-06-07T00:00:00",
-        "Status": "Aguarda pagamento",
         "DevedorID": 10,
         "CredorID": 8
     },
@@ -419,9 +414,26 @@ Content-Type: application/json
         "Descricao": "Porcelanato Cimentício Acetinado Borda Reta Interno 61x61cm Beton 61988 Artens",
         "DataDoPedido": "2024-05-08T00:00:00",
         "DataDoVencimento": "2024-08-08T00:00:00",
-        "Status": "Aguarda pagamento",
         "DevedorID": 5,
         "CredorID": 8
+    }
+]
+
+###
+//Criar um novo pedido
+POST {{ControleDePagamentos_HostAddress}}/api/pedido/cadastrar
+Content-Type: application/json
+
+[
+    {
+    "ID": 7,
+        "valorTotal": 2099,
+        "nome": "Smart TV",
+        "descricao": "SAMSUNG Smart TV Crystal 50 4K UHD CU7700 - Alexa built in Samsung Gaming Hub, Preto",
+        "dataDoPedido": "2024-05-01T00:00:00",
+        "dataDoVencimento": "2024-05-10T00:00:00",
+        "devedorID": 3,
+        "credorID": 6
     }
 ]
 
@@ -434,6 +446,8 @@ GET {{ControleDePagamentos_HostAddress}}/api/pedido/exibir
 ###
 //altera um pedido
 PUT {{ControleDePagamentos_HostAddress}}/api/pedido/alterar/2
+Content-Type: application/json
+
 {
   "id": 2,
   "valorTotal": 200.00,
@@ -493,6 +507,58 @@ Content-Type: application/json
   "CredorID": 6
 }
 
+###
+//Criar um novo pagamento
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
+
+{
+  "valor": 1000,
+  "dataDePagamento": "2024-05-25T00:00:00",
+  "pedidoID": 4,
+  "devedorID": 9,
+  "credorID": 8
+}
 
 ###
-//criar testes no Rest client
+//Criar um novo pagamento
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
+
+{
+  "valor": 2000,
+  "dataDePagamento": "2024-05-30T00:00:00",
+  "pedidoID": 5,
+  "devedorID": 10,
+  "credorID": 8
+}
+
+
+###
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
+
+{
+  "valor": 25000,
+  "dataDePagamento": "2024-06-15T00:00:00",
+  "pedidoID": 6,
+  "devedorID": 5,
+  "credorID": 8
+}
+
+###
+POST {{ControleDePagamentos_HostAddress}}/api/pagamento/cadastrar
+Content-Type: application/json
+
+{
+  "valor": 2099,
+  "dataDePagamento": "2024-05-08T00:00:00",
+  "pedidoID": 7,
+  "devedorID": 3,
+  "credorID": 6
+}
+
+
+###
+
+//terminar de incluir os testes

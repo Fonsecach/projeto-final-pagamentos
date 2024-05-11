@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ControleDePagamentos.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class CreateInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,7 +39,7 @@ namespace ControleDePagamentos.Migrations
                     Descricao = table.Column<string>(type: "TEXT", nullable: true),
                     DataDoPedido = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DataDoVencimento = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
                     DevedorID = table.Column<int>(type: "INTEGER", nullable: false),
                     CredorID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
