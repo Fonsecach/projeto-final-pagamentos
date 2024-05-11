@@ -292,13 +292,13 @@ app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDat
     return Results.Json(pagamentos);
 }).WithName("ExibirPagamentosRecebidosPorId").WithOpenApi();
 
-//deletar pedidos
+//deletar pagamentos
 app.MapDelete("/api/pagamentos/deletar/{id}", async ([FromRoute] int id, [FromServices] AppDataContext contextPagamentos) =>
 {
     var pagamento = await contextPagamentos.Pagamentos.FindAsync(id);
     if (pagamento is null)
     {
-        return Results.NotFound("Pedido não localizada");
+        return Results.NotFound("Pagamento não localizada");
     }
     contextPagamentos.Pagamentos.Remove(pagamento);
     await contextPagamentos.SaveChangesAsync();
