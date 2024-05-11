@@ -169,7 +169,7 @@ app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPed
 
 }).WithName("ExibirPedidos").WithOpenApi();
 
-//Implementar endpoints dos pedidos
+
 //buscar pedido por ID
 app.MapGet("/api/pedido/exibir/id/{id}", async ([FromServices] AppDataContext contextPedidos, int id) =>
 {
@@ -194,7 +194,38 @@ app.MapGet("/api/pedido/exibir/nome/{nome}", async ([FromServices] AppDataContex
 
 }).WithName("ExibirPedidoPorNome").WithOpenApi();
 
-//TO-DO: implementar alterar pedidos
+//alterar pedidos
+app.MapPut("/api/pedido/alterar/{id}", async ([FromRoute] int id, [FromBody] Pedido pedidoAtualizado, [FromServices] AppDataContext contextPedidos) =>
+
+{
+
+    var pedidoExistente = await contextPedidos.Pedidos.FindAsync(id);
+
+  
+
+    if (pedidoExistente is null)
+
+    {
+
+        return Results.NotFound("Pedido não localizado");
+
+    }
+    // Atualizar as propriedades do pedido existente com os dados do pedidoAtualizado
+
+    pedidoExistente.Nome = pedidoAtualizado.Nome;
+    pedidoExistente.ValorTotal = pedidoAtualizado.ValorTotal;
+    pedidoExistente.Descricao = pedidoAtualizado.Descricao;
+    pedidoExistente.DataDoPedido = pedidoAtualizado.DataDoPedido;
+    pedidoExistente.DataDoVencimento = pedidoAtualizado.DataDoVencimento;
+    pedidoExistente.Status = pedidoAtualizado.Status;
+    pedidoExistente.DevedorID = pedidoAtualizado.DevedorID;
+    pedidoExistente.CredorID = pedidoAtualizado.CredorID;
+    
+    await contextPedidos.SaveChangesAsync();
+
+    return Results.Ok(pedidoAtualizado);
+
+}).WithName("PedidoAtualizado").WithOpenApi();
 
 //deletar pedidos
 app.MapDelete("/api/pedido/deletar/{id}", async ([FromRoute] int id, [FromServices] AppDataContext contextPedidos) =>

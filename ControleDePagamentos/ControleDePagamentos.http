@@ -14,7 +14,7 @@ GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir/id/1
 
 ###
 
-//Busca pessoa por ID
+//Busca pessoa por nome
 GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir/nome/Ana
 
 
@@ -218,6 +218,95 @@ Content-Type: application/json
 
 
 ###
+POST {{ControleDePagamentos_HostAddress}}/api/pessoas/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "ID": 8,
+        "Nome": "Sebastião e Breno Construtora Ltda",
+        "NumDocumento": "73.406.160/0001-09",
+        "Tipo": 1,
+        "Enderecos": [
+            {
+                "ID": 8,
+                "Logradouro": "Travessa Abel",
+                "Bairro": "São João do Cabrito",
+                "Cidade": "Salvador",
+                "Estado": "BA",
+                "CEP": "40490-380",
+                "PessoaID": 8
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 8,
+                "Email": "qualidade@sebastiaoebrenoconstrutora.com.br",
+                "WhatsApp": "+55 71 3778-9490",
+                "Telefone": "+55 71 98258-0684",
+                "Observacoes": "Contato Administrativo",
+                "PessoaID": 8
+            }
+        ]
+    },
+        {
+        "ID": 9,
+        "Nome": "Ricardo e Regina Marketing Ltda",
+        "NumDocumento": "16.586.509/0001-06",
+        "Tipo": 1,
+        "Enderecos": [
+            {
+                "ID": 9,
+                "Logradouro": "Rua das Macieiras, 950",
+                "Bairro": "Alphaville Graciosa",
+                "Cidade": "Pinhais",
+                "Estado": "PR",
+                "CEP": "83327-200",
+                "PessoaID": 9
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 9,
+                "Email": "orcamento@ricardoereginamarketingltda.com.br",
+                "WhatsApp": "+55 41 2625-8597",
+                "Telefone": "+55 41 98830-3428",
+                "Observacoes": "Contato Comercial",
+                "PessoaID": 9
+            }
+        ]
+    },
+            {
+        "ID": 10,
+        "Nome": "Alice e Victor Buffet Ltda",
+        "NumDocumento": "16.586.509/0001-06",
+        "Tipo": 1,
+        "Enderecos": [
+            {
+                "ID": 10,
+                "Logradouro": "Rua Javert Czarnecki Mizerkowski, 10",
+                "Bairro": "Guatupê",
+                "Cidade": "São José dos Pinhais",
+                "Estado": "PR",
+                "CEP": "83060-205",
+                "PessoaID": 10
+            }
+        ],
+        "Contatos": [
+            {
+                "ID": 10,
+                "Email": "sac@aliceevictorbuffetltda.com.br",
+                "WhatsApp": "+55 41 98778-1912",
+                "Telefone": "+55 41 98778-1912",
+                "Observacoes": "Contato Principal",
+                "PessoaID": 10
+            }
+        ]
+    }
+]
+
+
+###
 //Atualizar uma pessoa
 PUT {{ControleDePagamentos_HostAddress}}/api/pessoas/alterar/5
 Content-Type: application/json
@@ -262,8 +351,8 @@ Content-Type: application/json
     {
         "ID": 1,
         "ValorTotal": 100.50,
-        "Nome": "Pedido 1",
-        "Descricao": "Este é o pedido número 1",
+        "Nome": "Luminárias",
+        "Descricao": "Kit Luminárias modernas",
         "DataDoPedido": "2024-05-06T00:00:00",
         "DataDoVencimento": "2024-05-20T00:00:00",
         "Status": "Aguarda pagamento",
@@ -296,8 +385,71 @@ Content-Type: application/json
 
 
 ###
+//Cadastro de novos pedidos
+POST {{ControleDePagamentos_HostAddress}}/api/pedido/cadastrar
+Content-Type: application/json
+
+[
+    {
+        "ID": 4,
+        "ValorTotal": 1000,
+        "Nome": "Luminárias",
+        "Descricao": "Kit Luminárias Vintage",
+        "DataDoPedido": "2024-05-06T00:00:00",
+        "DataDoVencimento": "2024-06-06T00:00:00",
+        "Status": "Aguarda pagamento",
+        "DevedorID": 9,
+        "CredorID": 8
+    },
+    {
+        "ID": 5,
+        "ValorTotal": 2000.00,
+        "Nome": "Cuba",
+        "Descricao": "Cuba de Embutir Cerâmica Oval",
+        "DataDoPedido": "2024-05-07T00:00:00",
+        "DataDoVencimento": "2024-06-07T00:00:00",
+        "Status": "Aguarda pagamento",
+        "DevedorID": 10,
+        "CredorID": 8
+    },
+    {
+        "ID": 6,
+        "ValorTotal": 25000,
+        "Nome": "Porcelanato",
+        "Descricao": "Porcelanato Cimentício Acetinado Borda Reta Interno 61x61cm Beton 61988 Artens",
+        "DataDoPedido": "2024-05-08T00:00:00",
+        "DataDoVencimento": "2024-08-08T00:00:00",
+        "Status": "Aguarda pagamento",
+        "DevedorID": 5,
+        "CredorID": 8
+    }
+]
+
+
+###
 //Obtem todos pedidos cadastradas
 GET {{ControleDePagamentos_HostAddress}}/api/pedido/exibir
+
+
+###
+//altera um pedido
+PUT {{ControleDePagamentos_HostAddress}}/api/pedido/alterar/2
+{
+  "id": 2,
+  "valorTotal": 200.00,
+  "nome": "Chuveiro",
+  "descricao": "Chuveiro Elétrico Eletrônico 220V 7800w Preto Fosco Quadrado Acqua Duo Ultra Lorenzetti",
+  "dataDoPedido": "2024-05-11T03:17:09.449Z",
+  "dataDoVencimento": "2024-06-11T03:17:09.449Z",
+  "status": "Aguarda pagamento",
+  "devedorID": 3,
+  "credorID": 8
+}
+
+
+###
+//Remover um pedido
+DELETE {{ControleDePagamentos_HostAddress}}/api/pedido/deletar/3
 
 
 ###
@@ -343,3 +495,4 @@ Content-Type: application/json
 
 
 ###
+//criar testes no Rest client
