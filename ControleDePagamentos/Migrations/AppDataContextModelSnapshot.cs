@@ -127,6 +127,7 @@ namespace ControleDePagamentos.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("ValorTotal")

@@ -11,8 +11,8 @@ using Models;
 namespace ControleDePagamentos.Migrations
 {
     [DbContext(typeof(AppDataContext))]
-    [Migration("20240507001900_Initial")]
-    partial class Initial
+    [Migration("20240511144243_CreateInit")]
+    partial class CreateInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,7 @@ namespace ControleDePagamentos.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("ValorTotal")
