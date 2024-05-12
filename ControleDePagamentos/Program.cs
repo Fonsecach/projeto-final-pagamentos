@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<AppDataContext>();
 
 var app = builder.Build();
@@ -439,5 +440,39 @@ app.MapDelete("/api/pagamentos/deletar/{id}", async ([FromRoute] int id, [FromSe
 
     return Results.Ok(pagamento);
 }).WithName("DeletarPagamento").WithOpenApi();
+
+
+app.MapGet("/api/pessoas/credor/resumo/{id}", async ([FromServices] AppDataContext context, int id) =>
+{
+// Busca os pedidos onde a pessoa é credora (usando CredorID)
+var pedidos = await context.Pedidos.Where(p => p.CredorID == id).ToListAsync(); 
+
+
+if (pedidos == null || !pedidos.Any())
+{
+    return Results.NotFound($"Nenhum pedido encontrado para o Credor com ID {id}");
+}
+
+// Busca as informações da pessoa
+var pessoa = await context.Pessoas.FindAsync(id);
+
+if (pessoa == null)
+{
+    return Results.NotFound($"Pessoa com ID {id} não foi encontrada");
+}
+
+var resumoCredor = new
+{
+    Id = pessoa.ID,
+    Nome = pessoa.Nome,
+    QuantidadePedidos = pedidos.Count,
+    ValorTotalPedidos = pedidos.Sum(p => p.ValorTotal)
+};
+
+return Results.Ok(resumoCredor);
+
+}).WithName("ExibirResumoCredor").WithOpenApi();
+
+
 
 app.Run();
