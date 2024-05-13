@@ -350,25 +350,18 @@ app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDat
     return Results.Json(pagamentos);
 }).WithName("ExibirPagamentosRecebidosPorId").WithOpenApi();
 
-//Consulta a média de pagamentos recebidos por ID
+//Consulta a média de pagamentos recebidos por ID do banco de dados
 app.MapGet("/api/pagamentos/recebidos/media/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) =>
 {
-    var mediaRecebida = await contextPagamentos.Pagamentos
+    var pagamentos = await contextPagamentos.Pagamentos
         .Where(p => p.CredorID == id)
-        .AverageAsync(p => p.Valor);
+        .Select(p => p.Valor)
+        .ToListAsync();
+
+    var mediaRecebida = pagamentos.Average();
 
     return Results.Json(new {mediaRecebida});
 }).WithName("ExibirMediaRecebidaPorCredorId").WithOpenApi();
-
-//Exibir a soma dos pagamentos recebidos por ID
-app.MapGet("/api/pagamentos/recebidos/total/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) =>
-{
-    var totalRecebido = await contextPagamentos.Pagamentos
-        .Where(p => p.CredorID == id)
-        .SumAsync(p => p.Valor);
-
-    return Results.Json(new {totalRecebido});
-}).WithName("ExibirTotalRecebidoPorCredorId").WithOpenApi();
 
 // Retorna o maior pagamento
 app.MapGet("/api/pagamentos/maior/", async ([FromServices] AppDataContext contextPagamentos) =>
