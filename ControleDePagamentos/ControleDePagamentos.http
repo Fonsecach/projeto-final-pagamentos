@@ -560,5 +560,41 @@ Content-Type: application/json
 
 
 ###
+GET {{{{ControleDePagamentos_HostAddress}}/api/pagamentos/exibir
+
+{
+  "info": {
+    "_postman_id": "e5c6a6d5-dc5d-4a6d-8dc5-dc5a6d2a6d8c",
+    "name": "Exibir Pagamentos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Exibir Pagamentos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{ControleDePagamentos_HostAddress}}/api/pagamentos/exibir",
+          "protocol": "http",
+          "host": [
+            "{{ControleDePagamentos_HostAddress}}"
+          ],
+          "path": [
+            "api",
+            "pagamentos",
+            "exibir"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
+
 
 //terminar de incluir os testes
