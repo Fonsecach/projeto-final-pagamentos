@@ -473,6 +473,4 @@ return Results.Ok(resumoCredor);
 
 }).WithName("ExibirResumoCredor").WithOpenApi();
 
-
-
 app.Run();
