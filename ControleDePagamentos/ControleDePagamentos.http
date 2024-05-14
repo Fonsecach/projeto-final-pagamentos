@@ -1,22 +1,5 @@
 
-
 @ControleDePagamentos_HostAddress = http://localhost:5241
-
-//Obtem todas pessoas cadastradas
-GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir
-
-
-###
-
-//Busca pessoa por ID
-GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir/id/1
-
-
-###
-
-//Busca pessoa por nome
-GET {{ControleDePagamentos_HostAddress}}/api/pessoas/exibir/nome/Ana
-
 
 ###
 
@@ -337,11 +320,6 @@ Content-Type: application/json
 }
 
 ###
-//Remover uma pessoa
-DELETE {{ControleDePagamentos_HostAddress}}/api/pessoas/deletar/7
-
-
-###
 
 //Cadastro de pedido
 POST {{ControleDePagamentos_HostAddress}}/api/pedido/cadastrar
@@ -437,12 +415,6 @@ Content-Type: application/json
     }
 ]
 
-
-###
-//Obtem todos pedidos cadastradas
-GET {{ControleDePagamentos_HostAddress}}/api/pedido/exibir
-
-
 ###
 //altera um pedido
 PUT {{ControleDePagamentos_HostAddress}}/api/pedido/alterar/2
@@ -459,11 +431,6 @@ Content-Type: application/json
   "devedorID": 3,
   "credorID": 8
 }
-
-
-###
-//Remover um pedido
-DELETE {{ControleDePagamentos_HostAddress}}/api/pedido/deletar/3
 
 
 ###
