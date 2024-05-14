@@ -2,7 +2,7 @@
 
 ## Projeto Final - Parte I - Tópicos Especiais em Sistemas
 
-##Como Rodar o Projeto
+## Como Rodar o Projeto
 
 ### Pré-requisitos
 Certifique-se de ter o SDK do .NET Core 8.0 instalado em sua máquina. Você pode baixá-lo em dotnet.microsoft.com.
