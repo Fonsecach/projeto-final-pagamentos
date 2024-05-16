@@ -2,6 +2,10 @@
 
 Este projeto é uma aplicação de gerenciamento de pessoas, pedidos e pagamentos, construída utilizando o framework ASP.NET Core. Ele fornece uma API RESTful para cada uma dessas entidades, permitindo operações de cadastro, consulta, atualização e exclusão(CRUD).
 
+## Classes
+
+<img width="3184" alt="Untitled(2)" src="https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/a4c8e767-a844-4906-acfa-1ac510246f72">
+
 ## Funcionalidades Principais
 
 - *Gerenciamento de Pessoas*
@@ -36,7 +40,27 @@ Este projeto é uma aplicação de gerenciamento de pessoas, pedidos e pagamento
 - *Geração de relatorio de por credor*
   - Exibição de um resumo para credor, incluindo o número total de pedidos e o valor total dos pedidos.
 
-### Como Rodar o Projeto
+**Demonstração do Endpoint para cadastrar produtos**
+
+![POSTpagamento](https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/77f8848f-1f32-442f-86fe-8ae4c657c3b6)
+
+**Teste do Endpoint no ClientRest do Vs Code**
+
+![PostpagamentoReturn201](https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/b569cd62-2dcd-4a33-a1af-40e955b830b6)
+
+**Retorno da busca do pedido atualizado, utilizando o parametro Id n. 7 com o swaggerUI**
+
+![GetConsultaPedidoId7comStatusAtualizado](https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/bbc72d29-5753-437b-a18d-3770b8042557)
+
+**Demonstração do Endpoint para consultar um resumo dos pedidos e do valor total**
+
+![GETresumoCredor](https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/5eb4692b-7604-410a-bbd2-2f2e19ccb497)
+
+**Teste do Endpoint com o SwaggerUI, utilizando o parametro IdCliente n. 8**
+
+![TesteResumoCliente](https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/42b942c2-080b-4eb4-b9c1-0153896c709f)
+
+## Como Rodar o Projeto
 
 #### Pré-requisitos
 Certifique-se de ter o SDK do .NET Core 8.0 instalado em sua máquina. Você pode baixá-lo em dotnet.microsoft.com.
@@ -68,14 +92,10 @@ Criar a migração
 ```
 dotnet ef migrations add InitialCreate
 ```
-Criar o manco de dados
+Criar o banco de dados
 ```
-dotnet ef migrations add InitialCreate
+dotnet ef database update
 ```
 
 Com esses passos, você estará pronto para executar o projeto e começar a utilizar suas funcionalidades de gerenciamento de pessoas, pedidos e pagamentos.
 
-
-Descrever as funcionalidades
-
-<img width="3200" alt="Untitled" src="https://github.com/Fonsecach/projetocrud/assets/113487188/045e93d5-3260-407c-addf-ba1ffd7e0256">
