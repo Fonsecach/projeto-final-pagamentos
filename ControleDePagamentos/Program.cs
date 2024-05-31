@@ -13,8 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddDbContext<AppDataContext>();
+builder.Services.AddCors(options => {
+    options.AddPolicy("AcessoTotal",
+    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
 
 var app = builder.Build();
 
@@ -466,4 +469,5 @@ return Results.Ok(resumoCredor);
 
 }).WithName("ExibirResumoCredor").WithOpenApi();
 
+app.UseCors("AcessoTotal");
 app.Run();
