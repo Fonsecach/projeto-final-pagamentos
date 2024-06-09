@@ -2,9 +2,10 @@
 
 Este projeto é uma aplicação de gerenciamento de pessoas, pedidos e pagamentos, construída utilizando o framework ASP.NET Core. Ele fornece uma API RESTful para cada uma dessas entidades, permitindo operações de cadastro, consulta, atualização e exclusão(CRUD).
 
-## Classes
+## Banco de dados
 
-<img width="3184" alt="Untitled(2)" src="https://github.com/Fonsecach/projeto-final-pagamentos/assets/113487188/a4c8e767-a844-4906-acfa-1ac510246f72">
+file:///home/cleiton/Imagens/diagrama-bd.png
+
 
 ## Funcionalidades Principais
 
