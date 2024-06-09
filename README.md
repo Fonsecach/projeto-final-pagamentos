@@ -2,10 +2,6 @@
 
 Este projeto é uma aplicação de gerenciamento de pessoas, pedidos e pagamentos, construída utilizando o framework ASP.NET Core. Ele fornece uma API RESTful para cada uma dessas entidades, permitindo operações de cadastro, consulta, atualização e exclusão(CRUD).
 
-## Banco de dados
-
-file:///home/cleiton/Imagens/diagrama-bd.png
-
 
 ## Funcionalidades Principais
 
