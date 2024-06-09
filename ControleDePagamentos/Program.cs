@@ -134,7 +134,10 @@ app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataConte
 //alterar pessoa
 app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pessoa pessoaAtualizada, [FromServices] AppDataContext contextPessoas) =>
 {
-    var pessoaExistente = await contextPessoas.Pessoas.FindAsync(id);
+    var pessoaExistente = await contextPessoas.Pessoas
+        .Include(p => p.Enderecos)
+        .Include(p => p.Contatos)
+        .FirstOrDefaultAsync(p => p.ID == id);
 
     if (pessoaExistente is null)
     {
@@ -143,13 +146,30 @@ app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pe
 
     // Atualizar as propriedades da pessoa existente com os dados da pessoaAtualizada
     pessoaExistente.Nome = pessoaAtualizada.Nome;
+    pessoaExistente.NomeFantasia = pessoaAtualizada.NomeFantasia;
     pessoaExistente.NumDocumento = pessoaAtualizada.NumDocumento;
     pessoaExistente.Tipo = pessoaAtualizada.Tipo;
+    pessoaExistente.AtualizadoEm = DateTime.Now;
+
+    // Atualizar os endereços
+    pessoaExistente.Enderecos.Clear();
+    foreach (var endereco in pessoaAtualizada.Enderecos)
+    {
+        pessoaExistente.Enderecos.Add(endereco);
+    }
+
+    // Atualizar os contatos
+    pessoaExistente.Contatos.Clear();
+    foreach (var contato in pessoaAtualizada.Contatos)
+    {
+        pessoaExistente.Contatos.Add(contato);
+    }
 
     await contextPessoas.SaveChangesAsync();
 
-    return Results.Ok(pessoaAtualizada);
+    return Results.Ok(pessoaExistente);
 }).WithName("AtualizarPessoa").WithOpenApi();
+
 
 //excluir pessoa
 

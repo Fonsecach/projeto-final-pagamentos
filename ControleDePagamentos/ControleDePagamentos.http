@@ -544,29 +544,37 @@ PUT {{ControleDePagamentos_HostAddress}}/api/pessoas/alterar/5
 Content-Type: application/json
 
 {
-   "nome":"Fernando Soares",
-   "numDocumento":"1234567890",
-   "tipo":0,
-   "enderecos":[
-      {
-         "id":5,
-         "Logradouro":"Rua das Violetas",
-         "Bairro":"Jardim das Violetas",
-         "Cidade":"Curitiba",
-         "Estado":"PR",
-         "CEP":"81000-005",
-         "PessoaID":5
-      }
-   ],
-   "contatos":[
-      {
-         "id":5,
-         "email":"pedrosoares@teste.com",
-         "whatsapp":"551234567890",
-         "telefone":"1234-5678"
-      }
-   ]
+  "nome": "Vitor e Sophia Publicidade e Propaganda ME",
+  "nomeFantasia": "Vitor e Sophia Publicidade e Propaganda",
+  "numDocumento": "13.065.890/0001-61",
+  "tipo": 1,
+  "enderecos": [
+    {
+      "id": 5,
+      "logradouro": "Rodovia MG-05",
+      "numero": "365",
+      "complemento": null,
+      "bairro": "Novo Alvorada",
+      "cidade": "Sabará",
+      "estado": "MG",
+      "cep": "34650-000",
+      "pessoaID": 1
+    }
+  ],
+  "contatos": [
+    {
+      "id": 5,
+      "email": "suporte@vitoresophiapublicidadeepropagandame.com.br",
+      "whatsApp": "(41) 9999-9999",
+      "telefone": "(41) 3333-3333",
+      "pessoaID": 5
+    }
+  ],
+  "criadoEm": "2024-01-10T09:15:00.000Z",
+  "atualizadoEm": "2024-06-09T14:32:00.000Z",
+  "observacoes": "string"
 }
+
 
 ###
 
