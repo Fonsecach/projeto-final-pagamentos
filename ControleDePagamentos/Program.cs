@@ -60,22 +60,50 @@ app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [F
 }).WithName("AddPessoas").WithOpenApi();
 
 //consulta de todas as pessoas
-app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas) =>
+app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas, int pageNumber = 1, int pageSize = 10) =>
 {
-    var pessoas = await contextPessoas.Pessoas.ToListAsync();
+    if (pageNumber <= 0 || pageSize <= 0)
+    {
+        return Results.BadRequest("O número da página e o tamanho da página devem ser maiores que zero.");
+    }
+
+    var totalPessoas = await contextPessoas.Pessoas.CountAsync();
+    var totalPages = (int)Math.Ceiling(totalPessoas / (double)pageSize);
+
+    var pessoas = await contextPessoas.Pessoas
+        .Include(p => p.Enderecos)
+        .Include(p => p.Contatos)
+        .OrderBy(p => p.Nome)
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
     if (pessoas.Any())
     {
-        var pessoasOrdenadas = pessoas.OrderBy(p => p.Nome).ToList();
-        return Results.Ok(pessoasOrdenadas);
+        var result = new
+        {
+            TotalPessoas = totalPessoas,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalPages = totalPages,
+            Pessoas = pessoas
+        };
+        return Results.Ok(result);
     }
-    return Results.NotFound("Nenhuma pessoa foi registrada");
 
+    return Results.NotFound("Nenhuma pessoa foi registrada");
 }).WithName("ExibirPessoas").WithOpenApi();
+
+
+
 
 //consulta  pessoa por ID
 app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext contextPessoas, int id) =>
 {
-    var pessoa = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.ID == id);
+    var pessoa = await contextPessoas.Pessoas.
+    Include(p => p.Enderecos).
+    Include(p => p.Contatos).
+    FirstOrDefaultAsync(p => p.ID == id);
     if (pessoa != null)
     {
         return Results.Ok(pessoa);
@@ -87,19 +115,29 @@ app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext c
 //consultar pessoa por nome
 app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataContext contextPessoas, string nome) =>
 {
-    var pessoa = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.Nome == nome);
-    if (pessoa != null)
-    {
-        return Results.Ok(pessoa);
-    }
-    return Results.NotFound($"Pessoa com nome {nome} não foi encontrada");
+    var pessoas = await contextPessoas.Pessoas
+        .Include(p => p.Enderecos)
+        .Include(p => p.Contatos)
+        .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
+        .ToListAsync();
 
+    if (pessoas.Any())
+    {
+        var pessoasOrdenadas = pessoas.OrderBy(p => p.Nome).ToList();
+        return Results.Ok(pessoasOrdenadas);
+    }
+
+    return Results.NotFound($"Pessoa com nome contendo '{nome}' não foi encontrada");
 }).WithName("ExibirPessoaPorNome").WithOpenApi();
+
 
 //alterar pessoa
 app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pessoa pessoaAtualizada, [FromServices] AppDataContext contextPessoas) =>
 {
-    var pessoaExistente = await contextPessoas.Pessoas.FindAsync(id);
+    var pessoaExistente = await contextPessoas.Pessoas
+        .Include(p => p.Enderecos)
+        .Include(p => p.Contatos)
+        .FirstOrDefaultAsync(p => p.ID == id);
 
     if (pessoaExistente is null)
     {
@@ -108,13 +146,30 @@ app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pe
 
     // Atualizar as propriedades da pessoa existente com os dados da pessoaAtualizada
     pessoaExistente.Nome = pessoaAtualizada.Nome;
+    pessoaExistente.NomeFantasia = pessoaAtualizada.NomeFantasia;
     pessoaExistente.NumDocumento = pessoaAtualizada.NumDocumento;
     pessoaExistente.Tipo = pessoaAtualizada.Tipo;
+    pessoaExistente.AtualizadoEm = DateTime.Now;
+
+    // Atualizar os endereços
+    pessoaExistente.Enderecos.Clear();
+    foreach (var endereco in pessoaAtualizada.Enderecos)
+    {
+        pessoaExistente.Enderecos.Add(endereco);
+    }
+
+    // Atualizar os contatos
+    pessoaExistente.Contatos.Clear();
+    foreach (var contato in pessoaAtualizada.Contatos)
+    {
+        pessoaExistente.Contatos.Add(contato);
+    }
 
     await contextPessoas.SaveChangesAsync();
 
-    return Results.Ok(pessoaAtualizada);
+    return Results.Ok(pessoaExistente);
 }).WithName("AtualizarPessoa").WithOpenApi();
+
 
 //excluir pessoa
 
@@ -186,16 +241,16 @@ app.MapGet("/api/pedido/exibir/id/{id}", async ([FromServices] AppDataContext co
 }).WithName("ExibirPedidoPorId").WithOpenApi();
 
 //buscar pedido por nome
-app.MapGet("/api/pedido/exibir/nome/{nome}", async ([FromServices] AppDataContext contextPedidos, string nome) =>
+app.MapGet("/api/pedido/exibir/Descricao/{descricao}", async ([FromServices] AppDataContext contextPedidos, string descricao) =>
 {
-    var pedido = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.Nome == nome);
+    var pedido = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.Descricao == descricao);
     if (pedido != null)
     {
         return Results.Ok(pedido);
     }
-    return Results.NotFound($"Pedido com nome {nome} não foi encontrada");
+    return Results.NotFound($"Pedido com descricao {descricao} não foi encontrada");
 
-}).WithName("ExibirPedidoPorNome").WithOpenApi();
+}).WithName("ExibirPedidoPorDescricao").WithOpenApi();
 
 // Retorna os pedidos aguardando pagamento
 app.MapGet("/api/pedidos/pagamento/pendente", async ([FromServices] AppDataContext contextPedidos) =>
@@ -258,7 +313,7 @@ app.MapPut("/api/pedido/alterar/{id}", async ([FromRoute] int id, [FromBody] Ped
     }
 
     // Atualizar as propriedades do pedido existente com os dados do pedidoAtualizado
-    pedidoExistente.Nome = pedidoAtualizado.Nome;
+    pedidoExistente.Descricao = pedidoAtualizado.Descricao;
     pedidoExistente.ValorTotal = pedidoAtualizado.ValorTotal;
     pedidoExistente.Descricao = pedidoAtualizado.Descricao;
     pedidoExistente.DataDoPedido = pedidoAtualizado.DataDoPedido;

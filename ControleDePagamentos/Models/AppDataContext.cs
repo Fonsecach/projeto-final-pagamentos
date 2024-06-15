@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using ControleDePagamentos.Models;
 
 namespace Models
 {
@@ -19,5 +15,61 @@ namespace Models
         {
             optionsBuilder.UseSqlite("Data Source=app.sqlite"); // Caminho para o arquivo SQLite - String de conexão
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Pagamento>()
+            .HasOne(p => p.Pedido)
+            .WithMany()
+            .HasForeignKey(p => p.PedidoID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Pagamento>()
+            .HasOne(p => p.Devedor)
+            .WithMany()
+            .HasForeignKey(p => p.DevedorID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Pagamento>()
+            .HasOne(p => p.Credor)
+            .WithMany()
+            .HasForeignKey(p => p.CredorID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Pagamento>()
+            .HasMany(p => p.Parcelas)
+            .WithOne(p => p.Pagamento)
+            .HasForeignKey(p => p.PagamentoID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Pedido>()
+            .HasOne(p => p.Devedor)
+            .WithMany()
+            .HasForeignKey(p => p.DevedorID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Pedido>()
+            .HasOne(p => p.Credor)
+            .WithMany()
+            .HasForeignKey(p => p.CredorID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Índices para melhoria de performance
+        modelBuilder.Entity<Pedido>()
+            .HasIndex(p => p.DevedorID)
+            .HasDatabaseName("IX_Pedido_DevedorID");
+
+        modelBuilder.Entity<Pedido>()
+            .HasIndex(p => p.CredorID)
+            .HasDatabaseName("IX_Pedido_CredorID");
+
+        modelBuilder.Entity<Pedido>()
+            .HasIndex(p => p.Descricao)
+            .HasDatabaseName("IX_Pedido_Descricao");
+
+        modelBuilder.Entity<Pedido>()
+            .HasIndex(p => p.ID)
+            .HasDatabaseName("IX_Pedido_ID");
+    }
     }
 }
