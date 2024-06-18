@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Models;
+using ControleDePagamentos.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,39 +61,22 @@ app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [F
 }).WithName("AddPessoas").WithOpenApi();
 
 //consulta de todas as pessoas
-app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas, int pageNumber = 1, int pageSize = 10) =>
+app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas) =>
 {
-    if (pageNumber <= 0 || pageSize <= 0)
-    {
-        return Results.BadRequest("O número da página e o tamanho da página devem ser maiores que zero.");
-    }
-
-    var totalPessoas = await contextPessoas.Pessoas.CountAsync();
-    var totalPages = (int)Math.Ceiling(totalPessoas / (double)pageSize);
-
     var pessoas = await contextPessoas.Pessoas
         .Include(p => p.Enderecos)
         .Include(p => p.Contatos)
         .OrderBy(p => p.Nome)
-        .Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize)
         .ToListAsync();
 
-    if (pessoas.Any())
+    if (pessoas.Count != 0)
     {
-        var result = new
-        {
-            TotalPessoas = totalPessoas,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            TotalPages = totalPages,
-            Pessoas = pessoas
-        };
-        return Results.Ok(result);
+        return Results.Ok(pessoas);
     }
 
     return Results.NotFound("Nenhuma pessoa foi registrada");
 }).WithName("ExibirPessoas").WithOpenApi();
+
 
 
 
@@ -118,10 +102,10 @@ app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataConte
     var pessoas = await contextPessoas.Pessoas
         .Include(p => p.Enderecos)
         .Include(p => p.Contatos)
-        .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
+        .Where(p => p.Nome.Contains(nome, StringComparison.CurrentCultureIgnoreCase))
         .ToListAsync();
 
-    if (pessoas.Any())
+    if (pessoas.Count != 0)
     {
         var pessoasOrdenadas = pessoas.OrderBy(p => p.Nome).ToList();
         return Results.Ok(pessoasOrdenadas);
@@ -219,14 +203,13 @@ app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [Fr
 app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPedidos) =>
 {
     var pedidos = await contextPedidos.Pedidos.ToListAsync();
-    if (pedidos.Any())
+    if (pedidos.Count != 0)
     {
         return Results.Ok(pedidos);
     }
     return Results.NotFound("Nenhuma pedido foi registrada");
 
 }).WithName("ExibirPedidos").WithOpenApi();
-
 
 //buscar pedido por ID
 app.MapGet("/api/pedido/exibir/id/{id}", async ([FromServices] AppDataContext contextPedidos, int id) =>
@@ -240,10 +223,12 @@ app.MapGet("/api/pedido/exibir/id/{id}", async ([FromServices] AppDataContext co
 
 }).WithName("ExibirPedidoPorId").WithOpenApi();
 
-//buscar pedido por nome
+//buscar pedido por descricao
 app.MapGet("/api/pedido/exibir/Descricao/{descricao}", async ([FromServices] AppDataContext contextPedidos, string descricao) =>
 {
-    var pedido = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.Descricao == descricao);
+    var pedido = await contextPedidos.Pedidos.
+    Where(p => p.Descricao.Contains(descricao, StringComparison.CurrentCultureIgnoreCase))
+    .ToListAsync();
     if (pedido != null)
     {
         return Results.Ok(pedido);
@@ -252,78 +237,23 @@ app.MapGet("/api/pedido/exibir/Descricao/{descricao}", async ([FromServices] App
 
 }).WithName("ExibirPedidoPorDescricao").WithOpenApi();
 
-// Retorna os pedidos aguardando pagamento
-app.MapGet("/api/pedidos/pagamento/pendente", async ([FromServices] AppDataContext contextPedidos) =>
-{
-    var pedidosAguardando = await contextPedidos.Pedidos
-        .Where(p => p.Status == "Aguarda pagamento")
-        .ToListAsync();
-
-    if (pedidosAguardando == null || pedidosAguardando.Count == 0)
-    {
-        return Results.NotFound();
-    }
-
-    return Results.Json(pedidosAguardando);
-}).WithName("ExibirPedidosAguardandoPagamento").WithOpenApi();
-
-//Retorna os pedidos que não foram pagos até a data de vencimento
-app.MapGet("/api/pedidos/pagamento/vencidos", async ([FromServices] AppDataContext contextPedidos) =>
-{
-    var pedidosVencidos = await contextPedidos.Pedidos
-        .Where(p => p.Status == "Aguardando Pagamento" && p.DataDoVencimento < DateTime.Now)
-        .ToListAsync();
-
-    if (pedidosVencidos == null || pedidosVencidos.Count == 0)
-    {
-        return Results.NotFound();
-    }
-
-    return Results.Json(pedidosVencidos);
-}).WithName("ExibirPedidosVencidos").WithOpenApi();
-
-// Retorna os pedidos pagos
-app.MapGet("/api/pedidos/pagamento/pago", async ([FromServices] AppDataContext contextPedidos) =>
-{
-    var pedidosPagos = await contextPedidos.Pedidos
-        .Where(p => p.Status == "Pago")
-        .ToListAsync();
-
-    if (pedidosPagos == null || pedidosPagos.Count == 0)
-    {
-        return Results.NotFound();
-    }
-
-    return Results.Json(pedidosPagos);
-}).WithName("ExibirPedidosPagos").WithOpenApi();
-
 //alterar pedidos
 app.MapPut("/api/pedido/alterar/{id}", async ([FromRoute] int id, [FromBody] Pedido pedidoAtualizado, [FromServices] AppDataContext contextPedidos) =>
-
 {
-
     var pedidoExistente = await contextPedidos.Pedidos.FindAsync(id);
 
     if (pedidoExistente is null)
-
     {
-
         return Results.NotFound("Pedido não localizado");
-
     }
-
     // Atualizar as propriedades do pedido existente com os dados do pedidoAtualizado
     pedidoExistente.Descricao = pedidoAtualizado.Descricao;
-    pedidoExistente.ValorTotal = pedidoAtualizado.ValorTotal;
-    pedidoExistente.Descricao = pedidoAtualizado.Descricao;
+    pedidoExistente.Valor = pedidoAtualizado.Valor;
     pedidoExistente.DataDoPedido = pedidoAtualizado.DataDoPedido;
-    pedidoExistente.DataDoVencimento = pedidoAtualizado.DataDoVencimento;
-    pedidoExistente.Status = pedidoAtualizado.Status;
-    pedidoExistente.DevedorID = pedidoAtualizado.DevedorID;
+    pedidoExistente.PagamentoID = pedidoAtualizado.PagamentoID;
     pedidoExistente.CredorID = pedidoAtualizado.CredorID;
     
     await contextPedidos.SaveChangesAsync();
-
     return Results.Ok(pedidoAtualizado);
 
 }).WithName("PedidoAtualizado").WithOpenApi();
@@ -338,88 +268,100 @@ app.MapDelete("/api/pedido/deletar/{id}", async ([FromRoute] int id, [FromServic
     }
     contextPedidos.Pedidos.Remove(pedido);
     await contextPedidos.SaveChangesAsync();
-
     return Results.Ok(pedido);
 }).WithName("DeletarPedido").WithOpenApi();
 
-//cadastro de pagamentos
+// Cadastro de pagamentos
 app.MapPost("/api/pagamento/cadastrar", async ([FromBody] Pagamento pagamento, [FromServices] AppDataContext contextPagamentos) =>
 {
     if (pagamento is null)
     {
         return Results.BadRequest("O pagamento enviado é inválido!");
     }
-
-    // Verificação adicional para evitar pagamentos duplicados com o mesmo PedidoID
-    var pagamentoExistenteComPedidoID = await contextPagamentos.Pagamentos
-        .FirstOrDefaultAsync(p => p.PedidoID == pagamento.PedidoID);
-
-    if (pagamentoExistenteComPedidoID != null)
-    {
-        return Results.BadRequest("Já existe um pagamento registrado para este PedidoID!");
-    }
-
     // 1. Adicionar o pagamento ao banco de dados
     contextPagamentos.Pagamentos.Add(pagamento);
+    pagamento.Status = "Pago";
     await contextPagamentos.SaveChangesAsync();
-
     // 2. Buscar o pedido correspondente
     var pedido = await contextPagamentos.Pedidos.FindAsync(pagamento.PedidoID);
     if (pedido == null)
     {
         return Results.NotFound("Pedido não encontrado.");
     }
-
-    // 3. Verificar se o pedido está aguardando pagamento
-    if (pedido.Status == "Aguardando Pagamento")
+    // 3. Verificar o tipo de pagamento e criar parcelas se necessário
+    if (pagamento.Tipo == Pagamento.TipoPagamento.Parcelado)
     {
-        // 4. Atualizar o status do pedido para "Pago"
-        pedido.Status = "Pago";
+        if (pagamento.QuantidadeParcelas < 2)
+        {
+            return Results.BadRequest("O número de parcelas deve ser maior que 1 para pagamentos parcelados.");
+        }
+
+        decimal valorParcela = pagamento.Valor / pagamento.QuantidadeParcelas;
+        DateTime dataVencimentoParcela = pagamento.DataDoVencimento;
+
+        for (int i = 0; i < pagamento.QuantidadeParcelas; i++)
+        {
+            Parcela parcela = new Parcela
+            {
+                Valor = valorParcela,
+                DataDeVencimento = dataVencimentoParcela,
+                PagamentoID = pagamento.ID
+            };
+
+            contextPagamentos.Parcelas.Add(parcela);
+            dataVencimentoParcela = dataVencimentoParcela.AddMonths(1); // Supondo parcelas mensais
+        }
         await contextPagamentos.SaveChangesAsync();
     }
-
-    return Results.Created($"/api/pagamentos/{pagamento.ID}", pagamento);
+    return Results.Created($"/api/pagamento/{pagamento.ID}", pagamento);
 }).WithName("CadastrarPagamentos").WithOpenApi();
 
-//consulta de todos os pagamentos
-app.MapGet("/api/pagamentos/exibir", async ([FromServices] AppDataContext contextPagamentos) =>
-{
-    var pagamentos = await contextPagamentos.Pagamentos.ToListAsync();
-    if (pagamentos.Any())
-    {
-        return Results.Ok(pagamentos);
-    }
-    return Results.NotFound("Nenhuma pedido foi registrada");
 
-}).WithName("ExibirPagamentos").WithOpenApi();
-
-//Consulta de todos pagamentos recebidos por ID
-app.MapGet("/api/pagamentos/recebidos/exibir/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) =>
+// Retorna os pagamentos com status aguardando pagamento
+app.MapGet("/api/pagamento/pendente", async ([FromServices] AppDataContext contextPagamentos) =>
 {
-    var pagamentos = await contextPagamentos.Pagamentos
-        .Where(p => p.CredorID == id)
+    var pagamentosAguardando = await contextPagamentos.Pagamentos
+        .Where(p => p.Status == "Aguardando Pagamento")
         .ToListAsync();
 
-    if (pagamentos == null || pagamentos.Count == 0)
+    if (pagamentosAguardando.Count == 0)
+    {
+        return Results.NotFound("Nenhum pagamento aguardando foi encontrado.");
+    }
+
+    return Results.Ok(pagamentosAguardando);
+}).WithName("ExibirPedidosAguardandoPagamento").WithOpenApi();
+
+//Retorna os pagamentos que não foram pagos até a data de vencimento
+app.MapGet("/api/pagamento/vencidos", async ([FromServices] AppDataContext contextPagamentos) =>
+{
+    var pagamentosVencidos = await contextPagamentos.Pagamentos
+        .Where(p => p.Status == "Aguardando Pagamento" && p.DataDoVencimento < DateTime.Now)
+        .ToListAsync();
+
+    if (pagamentosVencidos == null || pagamentosVencidos.Count == 0)
     {
         return Results.NotFound();
     }
 
-    return Results.Json(pagamentos);
-}).WithName("ExibirPagamentosRecebidosPorId").WithOpenApi();
+    return Results.Ok(pagamentosVencidos);
+}).WithName("ExibirPedidosVencidos").WithOpenApi();
 
-//Consulta a média de pagamentos recebidos por ID do banco de dados
-app.MapGet("/api/pagamentos/recebidos/media/{id}", async ([FromServices] AppDataContext contextPagamentos, int id) =>
+// Retorna os pagamentos pagos
+app.MapGet("/api/pagamento/pago", async ([FromServices] AppDataContext contextPagamentos) =>
 {
-    var pagamentos = await contextPagamentos.Pagamentos
-        .Where(p => p.CredorID == id)
-        .Select(p => p.Valor)
+    var pagamentosPagos = await contextPagamentos.Pagamentos
+        .Where(p => p.Status == "Pago")
         .ToListAsync();
 
-    var mediaRecebida = pagamentos.Average();
+    if (pagamentosPagos.Count == 0)
+    {
+        return Results.NotFound("Nenhum pagamento foi encontrado.");
+    }
 
-    return Results.Json(new {mediaRecebida});
-}).WithName("ExibirMediaRecebidaPorCredorId").WithOpenApi();
+    return Results.Ok(pagamentosPagos);
+}).WithName("ExibirPagamentosPagos").WithOpenApi();
+
 
 // Retorna o maior pagamento
 app.MapGet("/api/pagamentos/maior/", async ([FromServices] AppDataContext contextPagamentos) =>
@@ -491,38 +433,6 @@ app.MapDelete("/api/pagamentos/deletar/{id}", async ([FromRoute] int id, [FromSe
 
     return Results.Ok(pagamento);
 }).WithName("DeletarPagamento").WithOpenApi();
-
-
-app.MapGet("/api/pessoas/credor/resumo/{id}", async ([FromServices] AppDataContext context, int id) =>
-{
-// Busca os pedidos onde a pessoa é credora (usando CredorID)
-var pedidos = await context.Pedidos.Where(p => p.CredorID == id).ToListAsync(); 
-
-
-if (pedidos == null || !pedidos.Any())
-{
-    return Results.NotFound($"Nenhum pedido encontrado para o Credor com ID {id}");
-}
-
-// Busca as informações da pessoa
-var pessoa = await context.Pessoas.FindAsync(id);
-
-if (pessoa == null)
-{
-    return Results.NotFound($"Pessoa com ID {id} não foi encontrada");
-}
-
-var resumoCredor = new
-{
-    Id = pessoa.ID,
-    Nome = pessoa.Nome,
-    QuantidadePedidos = pedidos.Count,
-    ValorTotalPedidos = pedidos.Sum(p => p.ValorTotal)
-};
-
-return Results.Ok(resumoCredor);
-
-}).WithName("ExibirResumoCredor").WithOpenApi();
 
 app.UseCors("AcessoTotal");
 app.Run();

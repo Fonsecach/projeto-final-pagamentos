@@ -18,7 +18,6 @@ namespace Models
         public DateTime CriadoEm { get; set; } = DateTime.Now;
         public DateTime? AtualizadoEm { get; set; }
         public string? Observacoes { get; set; }
-
     }
 
     public enum TipoPessoa

@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Models;
 
 #nullable disable
 
@@ -39,7 +38,7 @@ namespace ControleDePagamentos.Migrations
 
                     b.HasIndex("PessoaID");
 
-                    b.ToTable("Contato");
+                    b.ToTable("Contatos");
                 });
 
             modelBuilder.Entity("ControleDePagamentos.Models.Endereco", b =>
@@ -76,7 +75,7 @@ namespace ControleDePagamentos.Migrations
 
                     b.HasIndex("PessoaID");
 
-                    b.ToTable("Endereco");
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("ControleDePagamentos.Models.Parcela", b =>
@@ -88,20 +87,20 @@ namespace ControleDePagamentos.Migrations
                     b.Property<DateTime?>("DataDePagamento")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DataDeVencimento")
+                    b.Property<DateTime?>("DataDeVencimento")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PagamentoID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Valor")
+                    b.Property<decimal?>("Valor")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
                     b.HasIndex("PagamentoID");
 
-                    b.ToTable("Parcela");
+                    b.ToTable("Parcelas");
                 });
 
             modelBuilder.Entity("Models.Pagamento", b =>
@@ -119,13 +118,29 @@ namespace ControleDePagamentos.Migrations
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DataDePagamento")
+                    b.Property<DateTime?>("DataDePagamento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DataDoVencimento")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DevedorID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("Forma")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PedidoID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuantidadeParcelas")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Tipo")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Valor")
@@ -137,7 +152,8 @@ namespace ControleDePagamentos.Migrations
 
                     b.HasIndex("DevedorID");
 
-                    b.HasIndex("PedidoID");
+                    b.HasIndex("PedidoID")
+                        .IsUnique();
 
                     b.ToTable("Pagamentos");
                 });
@@ -160,41 +176,18 @@ namespace ControleDePagamentos.Migrations
                     b.Property<DateTime>("DataDoPedido")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DataDoVencimento")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DevedorID")
+                    b.Property<int>("PagamentoID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Forma")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal?>("ValorTotal")
+                    b.Property<decimal>("Valor")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CredorID")
-                        .HasDatabaseName("IX_Pedido_CredorID");
-
-                    b.HasIndex("Descricao")
-                        .HasDatabaseName("IX_Pedido_Descricao");
-
-                    b.HasIndex("DevedorID")
-                        .HasDatabaseName("IX_Pedido_DevedorID");
-
-                    b.HasIndex("ID")
-                        .HasDatabaseName("IX_Pedido_ID");
+                    b.HasIndex("CredorID");
 
                     b.ToTable("Pedidos");
                 });
@@ -251,13 +244,11 @@ namespace ControleDePagamentos.Migrations
 
             modelBuilder.Entity("ControleDePagamentos.Models.Parcela", b =>
                 {
-                    b.HasOne("Models.Pagamento", "Pagamento")
+                    b.HasOne("Models.Pagamento", null)
                         .WithMany("Parcelas")
                         .HasForeignKey("PagamentoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Pagamento");
                 });
 
             modelBuilder.Entity("Models.Pagamento", b =>
@@ -275,8 +266,8 @@ namespace ControleDePagamentos.Migrations
                         .IsRequired();
 
                     b.HasOne("Models.Pedido", "Pedido")
-                        .WithMany()
-                        .HasForeignKey("PedidoID")
+                        .WithOne("Pagamento")
+                        .HasForeignKey("Models.Pagamento", "PedidoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -295,20 +286,17 @@ namespace ControleDePagamentos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Pessoa", "Devedor")
-                        .WithMany()
-                        .HasForeignKey("DevedorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Credor");
-
-                    b.Navigation("Devedor");
                 });
 
             modelBuilder.Entity("Models.Pagamento", b =>
                 {
                     b.Navigation("Parcelas");
+                });
+
+            modelBuilder.Entity("Models.Pedido", b =>
+                {
+                    b.Navigation("Pagamento");
                 });
 
             modelBuilder.Entity("Models.Pessoa", b =>

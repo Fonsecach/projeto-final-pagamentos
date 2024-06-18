@@ -584,12 +584,8 @@ Content-Type: application/json
 
 [
     {
-        "ID": 1,
-        "ValorTotal": 100.50,
-        "Nome": "Luminárias",
+        "Valor": 100.50,
         "Descricao": "Kit Luminárias modernas",
-        "DataDoPedido": "2024-05-06T00:00:00",
-        "DataDoVencimento": "2024-05-20T00:00:00",
         "DevedorID": 1,
         "CredorID": 2
     },
