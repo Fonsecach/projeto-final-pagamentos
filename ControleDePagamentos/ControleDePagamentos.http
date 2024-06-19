@@ -684,7 +684,7 @@ Content-Type: application/json
   "descricao": "Chuveiro Elétrico Eletrônico 220V 7800w Preto Fosco Quadrado Acqua Duo Ultra Lorenzetti",
   "dataDoPedido": "2024-05-11T03:17:09.449Z",
   "dataDoVencimento": "2024-06-11T03:17:09.449Z",
-  "status": "Aguarda pagamento",
+  "status": "Aguardando Pagamento",
   "devedorID": 3,
   "credorID": 8
 }

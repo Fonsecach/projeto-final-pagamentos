@@ -61,32 +61,19 @@ app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [F
 }).WithName("AddPessoas").WithOpenApi();
 
 //consulta de todas as pessoas
-app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas, int pageNumber = 1, int pageSize = 10) =>
+app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas) =>
 {
-    if (pageNumber <= 0 || pageSize <= 0)
-    {
-        return Results.BadRequest("O número da página e o tamanho da página devem ser maiores que zero.");
-    }
-
-    var totalPessoas = await contextPessoas.Pessoas.CountAsync();
-    var totalPages = (int)Math.Ceiling(totalPessoas / (double)pageSize);
-
     var pessoas = await contextPessoas.Pessoas
         .Include(p => p.Enderecos)
         .Include(p => p.Contatos)
         .OrderBy(p => p.Nome)
-        .Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize)
         .ToListAsync();
 
     if (pessoas.Any())
     {
         var result = new
         {
-            TotalPessoas = totalPessoas,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            TotalPages = totalPages,
+            TotalPessoas = pessoas.Count,
             Pessoas = pessoas
         };
         return Results.Ok(result);
@@ -94,9 +81,6 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
 
     return Results.NotFound("Nenhuma pessoa foi registrada");
 }).WithName("ExibirPessoas").WithOpenApi();
-
-
-
 
 //consulta  pessoa por ID
 app.MapGet("/api/pessoas/exibir/id/{id}", async ([FromServices] AppDataContext contextPessoas, int id) =>

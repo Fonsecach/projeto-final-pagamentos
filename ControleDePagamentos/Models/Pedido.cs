@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using Models;
 
 namespace ControleDePagamentos.Models
 {
@@ -11,13 +13,13 @@ namespace ControleDePagamentos.Models
         public DateTime DataDoPedido { get; set; }
         public DateTime DataDoVencimento { get; set; }
         public string Status { get; set; } = "Aguardando Pagamento";
-
-        // Chave estrangeira para Pessoa (Devedor)
         [ForeignKey("DevedorID")]
         public int DevedorID { get; set; }
-
-        // Chave estrangeira para Pessoa (Credor)
         [ForeignKey("CredorID")]
         public int CredorID { get; set; }
+        [JsonIgnore]
+        public Pessoa? Devedor { get; set; }
+        [JsonIgnore]
+        public Pessoa? Credor { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Models;
 
 
 namespace ControleDePagamentos.Models
@@ -18,7 +19,6 @@ namespace ControleDePagamentos.Models
     // Chave estrangeira para Pessoa (muitos para 1)
     [ForeignKey("PessoaID")] 
     public int PessoaID { get; set; }
-
     }
         
 }
