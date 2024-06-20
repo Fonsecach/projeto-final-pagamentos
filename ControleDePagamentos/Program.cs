@@ -66,20 +66,10 @@ app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPe
     var pessoas = await contextPessoas.Pessoas
         .Include(p => p.Enderecos)
         .Include(p => p.Contatos)
-        .OrderBy(p => p.Nome)
         .ToListAsync();
+    return pessoas;
 
-    if (pessoas.Any())
-    {
-        var result = new
-        {
-            TotalPessoas = pessoas.Count,
-            Pessoas = pessoas
-        };
-        return Results.Ok(result);
-    }
 
-    return Results.NotFound("Nenhuma pessoa foi registrada");
 }).WithName("ExibirPessoas").WithOpenApi();
 
 //consulta  pessoa por ID
