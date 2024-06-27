@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleDePagamentos.Migrations
 {
     [DbContext(typeof(AppDataContext))]
-    [Migration("20240619230159_InitialCreate")]
+    [Migration("20240627001504_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -178,8 +178,8 @@ namespace ControleDePagamentos.Migrations
                     b.Property<string>("Observacoes")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Tipo")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Tipo")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 

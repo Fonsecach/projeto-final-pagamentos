@@ -12,7 +12,7 @@ Content-Type: application/json
     "nome": "Mawa Construtora e Incorporadora Ltda",
     "nomeFantasia": "Locana Construtora e Incorporadora",
     "numDocumento": "39.727.793/0001-80",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 1,
@@ -43,7 +43,7 @@ Content-Type: application/json
     "nome": "Construtora Alphaville Ltda",
     "nomeFantasia": "Alphaville Construtora",
     "numDocumento": "12.345.678/0001-90",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 2,
@@ -74,7 +74,7 @@ Content-Type: application/json
     "nome": "Beta Engenharia e Construções S.A.",
     "nomeFantasia": "Beta Engenharia",
     "numDocumento": "54.321.098/0001-00",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 3,
@@ -105,7 +105,7 @@ Content-Type: application/json
     "nome": "Gamma Incorporações Imobiliárias Ltda",
     "nomeFantasia": "Gamma Incorporações",
     "numDocumento": "98.765.432/0001-10",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 4,
@@ -136,7 +136,7 @@ Content-Type: application/json
     "nome": "Delta Construtora e Empreendimentos Ltda",
     "nomeFantasia": "Delta Construtora",
     "numDocumento": "11.222.333/0001-20",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 5,
@@ -167,7 +167,7 @@ Content-Type: application/json
     "nome": "Epsilon Engenharia e Consultoria Ltda",
     "nomeFantasia": "Epsilon Engenharia",
     "numDocumento": "78.901.234/0001-30",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 6,
@@ -198,7 +198,7 @@ Content-Type: application/json
     "nome": "Zeta Construções e Incorporações S.A.",
     "nomeFantasia": "Zeta Construções",
     "numDocumento": "45.678.901/0001-40",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 7,
@@ -229,7 +229,7 @@ Content-Type: application/json
     "nome": "Eta Construtora e Incorporadora Ltda",
     "nomeFantasia": "Eta Construtora",
     "numDocumento": "23.456.789/0001-50",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 8,
@@ -260,7 +260,7 @@ Content-Type: application/json
     "nome": "Theta Engenharia e Construções Ltda",
     "nomeFantasia": "Theta Engenharia",
     "numDocumento": "87.654.321/0001-60",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 9,
@@ -291,7 +291,7 @@ Content-Type: application/json
     "nome": "Iota Incorporações Imobiliárias S.A.",
     "nomeFantasia": "Iota Incorporações",
     "numDocumento": "34.567.890/0001-70",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 10,
@@ -322,7 +322,7 @@ Content-Type: application/json
     "nome": "Kappa Construções e Engenharia Ltda",
     "nomeFantasia": "Kappa Construções",
     "numDocumento": "67.890.123/0001-80",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 11,
@@ -353,7 +353,7 @@ Content-Type: application/json
     "nome": "Lambda Engenharia e Arquitetura Ltda",
     "nomeFantasia": "Lambda Engenharia",
     "numDocumento": "90.123.456/0001-90",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 12,
@@ -384,7 +384,7 @@ Content-Type: application/json
     "nome": "Mu Engenharia e Construções S.A.",
     "nomeFantasia": "Mu Engenharia",
     "numDocumento": "12.345.678/0001-00",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 13,
@@ -415,7 +415,7 @@ Content-Type: application/json
     "nome": "Nu Construtora e Incorporadora Ltda",
     "nomeFantasia": "Nu Construtora",
     "numDocumento": "45.678.901/0001-10",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 14,
@@ -446,7 +446,7 @@ Content-Type: application/json
     "nome": "Omicron Engenharia e Projetos Ltda",
     "nomeFantasia": "Omicron Engenharia",
     "numDocumento": "78.901.234/0001-20",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 15,
@@ -477,7 +477,7 @@ Content-Type: application/json
     "nome": "Pi Engenharia e Construções Ltda",
     "nomeFantasia": "Pi Engenharia",
     "numDocumento": "23.456.789/0001-30",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 16,
@@ -508,7 +508,7 @@ Content-Type: application/json
     "nome": "Rho Incorporações Imobiliárias S.A.",
     "nomeFantasia": "Rho Incorporações",
     "numDocumento": "87.654.321/0001-40",
-    "tipo": 1,
+    "tipo": "juridica",
     "enderecos": [
       {
         "id": 17,
@@ -547,7 +547,7 @@ Content-Type: application/json
   "nome": "Vitor e Sophia Publicidade e Propaganda ME",
   "nomeFantasia": "Vitor e Sophia Publicidade e Propaganda",
   "numDocumento": "13.065.890/0001-61",
-  "tipo": 1,
+  "tipo": "juridica",
   "enderecos": [
     {
       "id": 5,

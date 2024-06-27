@@ -10,16 +10,11 @@ namespace Models
         public string? Nome { get; set; }
         public string? NomeFantasia { get; set; }
         public string? NumDocumento { get; set; }
-        public TipoPessoa Tipo { get; set; }
+        public string? Tipo { get; set; }
         public List<Endereco>? Enderecos { get; set; }
         public List<Contato>? Contatos { get; set; }
         public DateTime CriadoEm { get; set; } = DateTime.Now;
         public DateTime? AtualizadoEm { get; set; }
         public string? Observacoes { get; set; }
-    }
-    public enum TipoPessoa
-    {
-        Fisica,
-        Juridica
     }
 }

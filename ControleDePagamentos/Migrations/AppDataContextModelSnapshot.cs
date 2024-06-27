@@ -175,8 +175,8 @@ namespace ControleDePagamentos.Migrations
                     b.Property<string>("Observacoes")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Tipo")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Tipo")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 

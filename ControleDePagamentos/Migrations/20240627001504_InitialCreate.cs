@@ -20,7 +20,7 @@ namespace ControleDePagamentos.Migrations
                     Nome = table.Column<string>(type: "TEXT", nullable: true),
                     NomeFantasia = table.Column<string>(type: "TEXT", nullable: true),
                     NumDocumento = table.Column<string>(type: "TEXT", nullable: true),
-                    Tipo = table.Column<int>(type: "INTEGER", nullable: false),
+                    Tipo = table.Column<string>(type: "TEXT", nullable: true),
                     CriadoEm = table.Column<DateTime>(type: "TEXT", nullable: false),
                     AtualizadoEm = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Observacoes = table.Column<string>(type: "TEXT", nullable: true)
