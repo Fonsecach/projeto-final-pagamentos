@@ -15,7 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDataContext>();
-builder.Services.AddCors(options => {
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("AcessoTotal",
     builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
@@ -31,7 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//cadastro de pessoas
+//cadastro de uma lista de pessoas pessoas
 app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [FromServices] AppDataContext contextPessoas) =>
 {
     var pessoasNaoSalvas = new List<Pessoa>();
@@ -59,6 +60,27 @@ app.MapPost("/api/pessoas/cadastrar", async ([FromBody] List<Pessoa> pessoas, [F
     return Results.Created("", pessoasNaoSalvas);
 
 }).WithName("AddPessoas").WithOpenApi();
+
+//cadastro de uma pessoa
+app.MapPost("/api/pessoas/cadastrar/v2", async ([FromBody] Pessoa pessoa, [FromServices] AppDataContext contextPessoas) =>
+{
+    var pessoaExistente = await contextPessoas.Pessoas.FirstOrDefaultAsync(p => p.ID == pessoa.ID);
+
+    if (pessoaExistente != null)
+    {
+        // Pessoa já está na base de dados, então retorna erro
+        return Results.Conflict($"A pessoa com ID {pessoa.ID} já está cadastrada.");
+    }
+    else
+    {
+        // Pessoa não está na base de dados, então salva
+        contextPessoas.Pessoas.Add(pessoa);
+        await contextPessoas.SaveChangesAsync();
+
+        return Results.Created("", pessoa);
+    }
+
+}).WithName("AddPessoasV2").WithOpenApi();
 
 //consulta de todas as pessoas
 app.MapGet("/api/pessoas/exibir", async ([FromServices] AppDataContext contextPessoas) =>
@@ -161,7 +183,7 @@ app.MapDelete("/api/pessoas/deletar/{id}", async ([FromRoute] int id, [FromServi
     return Results.Ok(pessoa);
 }).WithName("DeletarPessoa").WithOpenApi();
 
-//cadastro de pedidos
+//cadastro de uma lista de pedidos
 app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [FromServices] AppDataContext contextPedidos) =>
 {
     var pedidoNaoSalvo = new List<Pedido>();
@@ -189,6 +211,26 @@ app.MapPost("/api/pedido/cadastrar", async ([FromBody] List<Pedido> pedidos, [Fr
     return Results.Created("", pedidoNaoSalvo);
 
 }).WithName("cadastrarPedidos").WithOpenApi();
+
+//cadastro de um pedido
+app.MapPost("/api/pedido/cadastrar/v2", async ([FromBody] Pedido pedido, [FromServices] AppDataContext contextPedidos) =>
+{
+    var pedidoExistente = await contextPedidos.Pedidos.FirstOrDefaultAsync(p => p.ID == pedido.ID);
+
+    if (pedidoExistente != null)
+    {
+        // Pedido já está na base de dados, então retorna erro
+        return Results.Conflict($"Um pedido com ID {pedido.ID} já está cadastrado.");
+    }
+    else
+    {
+        // Pessoa não está na base de dados, então salva
+        contextPedidos.Pedidos.Add(pedido);
+        await contextPedidos.SaveChangesAsync();
+
+        return Results.Created("", pedido);
+    }
+}).WithName("cadastrarPedidosV2").WithOpenApi();
 
 //consulta de todos os pedidos
 app.MapGet("/api/pedido/exibir", async ([FromServices] AppDataContext contextPedidos) =>
@@ -296,7 +338,7 @@ app.MapPut("/api/pedido/alterar/{id}", async ([FromRoute] int id, [FromBody] Ped
     pedidoExistente.Status = pedidoAtualizado.Status;
     pedidoExistente.DevedorID = pedidoAtualizado.DevedorID;
     pedidoExistente.CredorID = pedidoAtualizado.CredorID;
-    
+
     await contextPedidos.SaveChangesAsync();
 
     return Results.Ok(pedidoAtualizado);
@@ -393,7 +435,7 @@ app.MapGet("/api/pagamentos/recebidos/media/{id}", async ([FromServices] AppData
 
     var mediaRecebida = pagamentos.Average();
 
-    return Results.Json(new {mediaRecebida});
+    return Results.Json(new { mediaRecebida });
 }).WithName("ExibirMediaRecebidaPorCredorId").WithOpenApi();
 
 // Retorna o maior pagamento
@@ -470,32 +512,32 @@ app.MapDelete("/api/pagamentos/deletar/{id}", async ([FromRoute] int id, [FromSe
 
 app.MapGet("/api/pessoas/credor/resumo/{id}", async ([FromServices] AppDataContext context, int id) =>
 {
-// Busca os pedidos onde a pessoa é credora (usando CredorID)
-var pedidos = await context.Pedidos.Where(p => p.CredorID == id).ToListAsync(); 
+    // Busca os pedidos onde a pessoa é credora (usando CredorID)
+    var pedidos = await context.Pedidos.Where(p => p.CredorID == id).ToListAsync();
 
 
-if (pedidos == null || !pedidos.Any())
-{
-    return Results.NotFound($"Nenhum pedido encontrado para o Credor com ID {id}");
-}
+    if (pedidos == null || !pedidos.Any())
+    {
+        return Results.NotFound($"Nenhum pedido encontrado para o Credor com ID {id}");
+    }
 
-// Busca as informações da pessoa
-var pessoa = await context.Pessoas.FindAsync(id);
+    // Busca as informações da pessoa
+    var pessoa = await context.Pessoas.FindAsync(id);
 
-if (pessoa == null)
-{
-    return Results.NotFound($"Pessoa com ID {id} não foi encontrada");
-}
+    if (pessoa == null)
+    {
+        return Results.NotFound($"Pessoa com ID {id} não foi encontrada");
+    }
 
-var resumoCredor = new
-{
-    Id = pessoa.ID,
-    Nome = pessoa.Nome,
-    QuantidadePedidos = pedidos.Count,
-    ValorTotalPedidos = pedidos.Sum(p => p.ValorTotal)
-};
+    var resumoCredor = new
+    {
+        Id = pessoa.ID,
+        Nome = pessoa.Nome,
+        QuantidadePedidos = pedidos.Count,
+        ValorTotalPedidos = pedidos.Sum(p => p.ValorTotal)
+    };
 
-return Results.Ok(resumoCredor);
+    return Results.Ok(resumoCredor);
 
 }).WithName("ExibirResumoCredor").WithOpenApi();
 
