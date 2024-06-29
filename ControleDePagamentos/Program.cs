@@ -469,7 +469,7 @@ app.MapGet("/api/pagamentos/menor/", async ([FromServices] AppDataContext contex
 }).WithName("ExibirMenorPagamento").WithOpenApi();
 
 //alterar pagamentos
-app.MapPut("/api/pagamentos/deletar/{id}", async ([FromRoute] int id, [FromBody] Pagamento pagamentoAtualizado, [FromServices] AppDataContext contextPagamentos) =>
+app.MapPut("/api/pagamentos/alterar/{id}", async ([FromRoute] int id, [FromBody] Pagamento pagamentoAtualizado, [FromServices] AppDataContext contextPagamentos) =>
 
 {
 
