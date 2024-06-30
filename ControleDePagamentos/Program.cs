@@ -115,7 +115,7 @@ app.MapGet("/api/pessoas/exibir/nome/{nome}", async ([FromServices] AppDataConte
     var pessoas = await contextPessoas.Pessoas
         .Include(p => p.Enderecos)
         .Include(p => p.Contatos)
-        .Where(p => p.Nome.ToLower().Contains(nome.ToLower()))
+        .Where(p => p.Nome != null && p.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase))
         .ToListAsync();
 
     if (pessoas.Any())
@@ -149,17 +149,23 @@ app.MapPut("/api/pessoas/alterar/{id}", async ([FromRoute] int id, [FromBody] Pe
     pessoaExistente.AtualizadoEm = DateTime.Now;
 
     // Atualizar os endereços
-    pessoaExistente.Enderecos.Clear();
-    foreach (var endereco in pessoaAtualizada.Enderecos)
+    pessoaExistente.Enderecos?.Clear();
+    if (pessoaAtualizada.Enderecos != null)
     {
-        pessoaExistente.Enderecos.Add(endereco);
+        foreach (var endereco in pessoaAtualizada.Enderecos)
+        {
+            pessoaExistente.Enderecos?.Add(endereco);
+        }
     }
 
     // Atualizar os contatos
-    pessoaExistente.Contatos.Clear();
-    foreach (var contato in pessoaAtualizada.Contatos)
+    pessoaExistente.Contatos?.Clear();
+    if (pessoaAtualizada.Contatos != null)
     {
-        pessoaExistente.Contatos.Add(contato);
+        foreach (var contato in pessoaAtualizada.Contatos)
+        {
+            pessoaExistente.Contatos?.Add(contato);
+        }
     }
 
     await contextPessoas.SaveChangesAsync();
